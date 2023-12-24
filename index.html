@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Team Metrics</title>
+    <style>
+        :root {
+            --primary-100: #1F3A5F;
+            --primary-200: #4d648d;
+            --primary-300: #acc2ef;
+            --accent-100: #FF7F50;
+            --accent-200: #dd6236;
+            --text-100: #FFFFFF;
+            --text-200: #e0e0e0;
+            --bg-100: #0F1C2E;
+            --bg-200: #1f2b3e;
+            --bg-300: #374357;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-100);
+            color: var(--text-100);
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            background-color: var(--bg-200);
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        h1, h2 {
+            color: var(--text-100); /* Brighter color for better visibility */
+        }
+
+        .chart {
+            background-color: var(--bg-300);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .task {
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--primary-300);
+            padding-bottom: 10px;
+        }
+
+        a {
+            color: var(--accent-200); /* Lighter accent color for links */
+        }
+
+        a:hover {
+            color: var(--primary-300); /* Lighter color on hover for better visibility */
+        }
+    </style>
+
+
+</head>
+<body>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+
+<div class="container">
+    <h1>Developer Team Metrics</h1>
+
+    <!-- Developer Velocity Section -->
+    <div class="section">
+        <h2>Developer Velocity</h2>
+        <div id="average-velocity-chart" class="chart">
+            <h2>Average Developer Velocity</h2>
+            <!-- Placeholder for aggregated average velocity chart -->
+            <div id="average-developer-velocity-chart" class="chart"></div>
+        </div>
+        <!-- Placeholder for list of developers -->
+        <div id="developer-list">
+            <!-- Example Developer -->
+            <h3>John</h3>
+            <div class="chart">
+                <div id="chart-alex-developer-velocity-chart" class="chart"></div>
+            </div>
+            <h3>Jordan</h3>
+            <div class="chart">
+                <div id="chart-jordan-developer-velocity-chart" class="chart"></div>
+            </div>
+            <h3>Sam</h3>
+            <div class="chart">
+                <div id="chart-sam-developer-velocity-chart" class="chart"></div>
+            </div>
+            <h3>Taylor</h3>
+            <div class="chart">
+                <div id="chart-taylor-developer-velocity-chart" class="chart"></div>
+            </div>
+            <h3>Casey</h3>
+            <div class="chart">
+                <div id="chart-casey-developer-velocity-chart" class="chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Burn Down Metric Section -->
+    <div class="section">
+        <h2>Burn Down Metric</h2>
+        <div id="task-list">
+            <!-- Example Task 1 -->
+            <div class="task">
+                <h3>Task Name: <a href="task-link-1.html">Frontend Refactoring</a></h3>
+                <p>Estimated Due Date: 2023-12-15</p>
+                <div class="chart" id="burn-down-chart-1">
+                    <!-- Placeholder for task 1's burn down chart -->
+                </div>
+            </div>
+
+            <!-- Example Task 2 -->
+            <div class="task">
+                <h3>Task Name: <a href="task-link-2.html">Database Optimization</a></h3>
+                <p>Estimated Due Date: 2023-12-20</p>
+                <div class="chart" id="burn-down-chart-2">
+                    <!-- Placeholder for task 2's burn down chart -->
+                </div>
+            </div>
+
+            <!-- More tasks can be added here -->
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    // Sample data: story points over time for a developer
+    const data = [
+        {time: 'Day 1', points: 5},
+        {time: 'Day 2', points: 9},
+        {time: 'Day 3', points: 7},
+        {time: 'Day 4', points: 11},
+        {time: 'Day 5', points: 6}
+    ];
+
+    // Set dimensions and margins for the graph
+    const margin = {top: 20, right: 30, bottom: 30, left: 40},
+        width = 400 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
+
+    // Append the svg object to a div with id "developer-velocity-chart"
+    const svg = d3.select("#average-developer-velocity-chart")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Add X axis
+    const x = d3.scaleBand()
+        .range([0, width])
+        .domain(data.map(d => d.time))
+        .padding(0.1);
+    svg.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x));
+
+    // Add Y axis
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.points)])
+        .range([height, 0]);
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+    // Add the line
+    svg.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "#FF7F50")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+            .x(d => x(d.time))
+            .y(d => y(d.points))
+        );
+</script>
+
+<script>
+    // Sample data for each developer
+    const developers = [
+        {id: 'chart-alex',
+            data: [{week: 1, points: 15}, {week: 2, points: 18}, {week: 3, points: 20}, {
+                week: 4,
+                points: 17
+            }]
+        },
+        {id: 'chart-jordan',
+            data: [{week: 1, points: 12}, {week: 2, points: 14}, {week: 3, points: 13}, {
+                week: 4,
+                points: 15
+            }]
+        },
+        {id: 'chart-sam',
+            data: [{week: 1, points: 15}, {week: 2, points: 18}, {week: 3, points: 20}, {
+                week: 4,
+                points: 17
+            }]
+        },
+        {id: 'chart-taylor',
+            data: [{week: 1, points: 12}, {week: 2, points: 14}, {week: 3, points: 13}, {
+                week: 4,
+                points: 15
+            }]
+        },
+        {id: 'chart-casey',
+            data: [{week: 1, points: 15}, {week: 2, points: 18}, {week: 3, points: 20}, {
+                week: 4,
+                points: 17
+            }]
+        },
+    ];
+
+    // Function to create a line chart for a developer
+    function createVelocityChart(developer) {
+        const margin = {top: 20, right: 20, bottom: 30, left: 50},
+            width = 500 - margin.left - margin.right,
+            height = 300 - margin.top - margin.bottom;
+
+        const svg = d3.select(`#${developer.id}-developer-velocity-chart`)
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleLinear().domain([1, 4]).range([0, width]);
+        const y = d3.scaleLinear().domain([0, d3.max(developer.data, d => d.points)]).range([height, 0]);
+
+        svg.append("g").attr("transform", `translate(0,${height})`).call(d3.axisBottom(x));
+        svg.append("g").call(d3.axisLeft(y));
+
+        const line = d3.line().x(d => x(d.week)).y(d => y(d.points));
+        svg.append("path").data([developer.data]).attr("fill", "none").attr("stroke", "steelblue").attr("stroke-width", 1.5).attr("d", line);
+    }
+
+    // Create charts for each developer
+    developers.forEach(createVelocityChart);
+</script>
+
+<script>
+    // Burn down chart data
+    const tasks = [
+        {
+            id: 'burn-down-chart-1',
+            title: 'Frontend Refactoring',
+            startDate: '2023-11-01',
+            endDate: '2023-12-15',
+            initialPoints: 100,
+            burnDownData: [
+                {date: '2023-11-01', remainingPoints: 100},
+                {date: '2023-11-08', remainingPoints: 80},
+                {date: '2023-11-15', remainingPoints: 60},
+                {date: '2023-11-22', remainingPoints: 50},
+                {date: '2023-11-29', remainingPoints: 30},
+                {date: '2023-12-06', remainingPoints: 10},
+                {date: '2023-12-15', remainingPoints: 0},
+            ]
+        },
+        {
+            id: 'burn-down-chart-2',
+            title: 'Database Optimization',
+            startDate: '2023-11-01',
+            endDate: '2023-12-20',
+            initialPoints: 120,
+            burnDownData: [
+                {date: '2023-11-01', remainingPoints: 120},
+                {date: '2023-11-10', remainingPoints: 100},
+                {date: '2023-11-20', remainingPoints: 80},
+                {date: '2023-11-30', remainingPoints: 60},
+                {date: '2023-12-10', remainingPoints: 40},
+                {date: '2023-12-20', remainingPoints: 0},
+            ]
+        }
+    ];
+
+    // Function to create a burn down chart for a task
+    function createBurnDownChart(task) {
+        // Parse dates
+        const parseDate = d3.timeParse("%Y-%m-%d");
+        task.burnDownData.forEach(d => d.date = parseDate(d.date));
+
+        // Set dimensions and margins for the graph
+        const margin = {top: 20, right: 30, bottom: 30, left: 40},
+            width = 400 - margin.left - margin.right,
+            height = 300 - margin.top - margin.bottom;
+
+        // Append the svg object
+        const svg = d3.select(`#${task.id}`)
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Add X axis
+        const x = d3.scaleTime()
+            .domain(d3.extent(task.burnDownData, d => d.date))
+            .range([0, width]);
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        // Add Y axis
+        const y = d3.scaleLinear()
+            .domain([0, task.initialPoints])
+            .range([height, 0]);
+        svg.append("g")
+            .call(d3.axisLeft(y));
+
+        // Add the line
+        svg.append("path")
+            .datum(task.burnDownData)
+            .attr("fill", "none")
+            .attr("stroke", "#FF7F50")
+            .attr("stroke-width", 1.5)
+            .attr("d", d3.line()
+                .x(d => x(d.date))
+                .y(d => y(d.remainingPoints))
+            );
+    }
+
+    // Create burn down charts for each task
+    tasks.forEach(createBurnDownChart);
+</script>
+
+
+</body>
+</html>

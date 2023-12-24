@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "jira-velocity-test"
+version = "0.1.0"
+description = ""
+authors = ["aricma <adrian@aricma.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+jira = {extras = ["cli"], version = "^3.5.2"}
+humanize = "^4.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
