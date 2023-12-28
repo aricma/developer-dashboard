@@ -1,0 +1,25 @@
+.form-wrapper {
+    background-color: var(--bg-200);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+form {
+    display: flex;
+    flex-flow: column;
+}
+
+form input {
+    width: auto;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+}
+
+form input[type="submit"] {
+    background-color: var(--accent-100);
+    color: var(--text-100);
+    cursor: pointer;
+}

@@ -1,24 +1,14 @@
 # The burn down metric show how many days, weeks, months until a task is done
 import dataclasses
 from datetime import timedelta
-from enum import Enum
 from math import ceil
 from typing import List, Optional
 
 from humanize import naturaldelta
 
 
-class TaskType(Enum):
-    EPIC = "EPIC"
-    USER_STORY = "USER_STORY"
-    TASK = "TASK"
-    SPIKE = "SPIKE"
-    BUG = "BUG"
-
-
 @dataclasses.dataclass
 class Task:
-    type: TaskType
     id: str
     name: str
     link: str
@@ -27,7 +17,6 @@ class Task:
 
 @dataclasses.dataclass
 class BurnDownMetric:
-    type: TaskType
     id: str
     name: str
     link: str
@@ -54,7 +43,6 @@ class BurnDownTracker:
                 timedelta(days=ceil(task.story_points / self._developer_velocity_per_day))
             )
         metric = BurnDownMetric(
-            type=task.type,
             id=task.id,
             name=task.name,
             link=task.link,
@@ -70,35 +58,30 @@ if __name__ == '__main__':
 
     tasks = [
         Task(
-            type=TaskType.EPIC,
             id="1",
             name="epic-1",
             link="https://...",
             story_points=34,
         ),
         Task(
-            type=TaskType.TASK,
             id="2",
             name="task-1",
             link="https://...",
             story_points=5,
         ),
         Task(
-            type=TaskType.BUG,
             id="3",
             name="bug-3",
             link="https://...",
             story_points=None,
         ),
         Task(
-            type=TaskType.SPIKE,
             id="4",
             name="spike-4",
             link="https://...",
             story_points=5,
         ),
         Task(
-            type=TaskType.USER_STORY,
             id="5",
             name="spike-5",
             link="https://...",

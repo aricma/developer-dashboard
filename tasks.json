@@ -1,0 +1,134 @@
+{
+    "tasks": [
+        {
+            "id": "1",
+            "title": "foobar",
+            "burn_down_data": [
+                {
+                    "date": "2023-12-01",
+                    "remaining_story_points": 32
+                },
+                {
+                    "date": "2023-12-02",
+                    "remaining_story_points": 31
+                },
+                {
+                    "date": "2023-12-03",
+                    "remaining_story_points": 28
+                },
+                {
+                    "date": "2023-12-04",
+                    "remaining_story_points": 25
+                },
+                {
+                    "date": "2023-12-05",
+                    "remaining_story_points": 20
+                },
+                {
+                    "date": "2023-12-06",
+                    "remaining_story_points": 23
+                },
+                {
+                    "date": "2023-12-07",
+                    "remaining_story_points": 19
+                },
+                {
+                    "date": "2023-12-08",
+                    "remaining_story_points": 18
+                },
+                {
+                    "date": "2023-12-09",
+                    "remaining_story_points": 15
+                },
+                {
+                    "date": "2023-12-10",
+                    "remaining_story_points": 14
+                },
+                {
+                    "date": "2023-12-11",
+                    "remaining_story_points": 15
+                },
+                {
+                    "date": "2023-12-12",
+                    "remaining_story_points": 16
+                },
+                {
+                    "date": "2023-12-13",
+                    "remaining_story_points": 16
+                },
+                {
+                    "date": "2023-12-14",
+                    "remaining_story_points": 15
+                },
+                {
+                    "date": "2023-12-15",
+                    "remaining_story_points": 14
+                },
+                {
+                    "date": "2023-12-16",
+                    "remaining_story_points": 12
+                },
+                {
+                    "date": "2023-12-17",
+                    "remaining_story_points": 10
+                },
+                {
+                    "date": "2023-12-18",
+                    "remaining_story_points": 8
+                },
+                {
+                    "date": "2023-12-19",
+                    "remaining_story_points": 7
+                },
+                {
+                    "date": "2023-12-20",
+                    "remaining_story_points": 7
+                },
+                {
+                    "date": "2023-12-21",
+                    "remaining_story_points": 7
+                },
+                {
+                    "date": "2023-12-22",
+                    "remaining_story_points": 5
+                },
+                {
+                    "date": "2023-12-23",
+                    "remaining_story_points": 4
+                },
+                {
+                    "date": "2023-12-24",
+                    "remaining_story_points": 3
+                },
+                {
+                    "date": "2023-12-25",
+                    "remaining_story_points": 2
+                },
+                {
+                    "date": "2023-12-26",
+                    "remaining_story_points": 1
+                },
+                {
+                    "date": "2023-12-27",
+                    "remaining_story_points": 0
+                },
+                {
+                    "date": "2023-12-28",
+                    "remaining_story_points": 0
+                },
+                {
+                    "date": "2023-12-29",
+                    "remaining_story_points": 0
+                },
+                {
+                    "date": "2023-12-30",
+                    "remaining_story_points": 0
+                },
+                {
+                    "date": "2023-12-31",
+                    "remaining_story_points": 0
+                }
+            ]
+        }
+    ]
+}

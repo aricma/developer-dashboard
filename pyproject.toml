@@ -1,14 +1,19 @@
 [tool.poetry]
-name = "jira-velocity-test"
+name = "developer-dashboard"
 version = "0.1.0"
-description = ""
+description = "A dashboard for developer to keep track of the developer velocity and the current burn down state of every task in the pipeline."
 authors = ["aricma <adrian@aricma.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-jira = {extras = ["cli"], version = "^3.5.2"}
+jira = { extras = ["cli"], version = "^3.5.2" }
 humanize = "^4.9.0"
+fastapi = "^0.105.0"
+uvicorn = { extras = ["standard"], version = "^0.25.0" }
+pyyaml = "^6.0.1"
+pyjwt = "^2.8.0"
+python-multipart = "^0.0.6"
 
 
 [build-system]

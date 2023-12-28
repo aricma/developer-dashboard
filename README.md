@@ -65,6 +65,7 @@ data from existing ticket systems (e.g., Jira), the tool aims to:
 
 - The tool interfaces with ticket systems like Jira through their API.
 - It fetches relevant data points such as story points, task statuses, and completion dates.
+- since every ticket system is different and systems like jira even allow for their users to customize their ticket types there is no good way to provide a unified integration for the ticket systems out there. To get started and inverse the dependency we start by creating an interface for integrations. Users can write there own endpoints and the developer dashboard will just use the given endpoint to fetch the necessary data. 
 
 ### Data Processing
 

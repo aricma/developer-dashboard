@@ -1,3 +1,7 @@
 .idea
-
+__pycache__
+.DS_Store
 API.token
+
+# generated files by the server to store data
+accounts.yml

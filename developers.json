@@ -1,0 +1,48 @@
+{
+    "developers": [
+        {
+            "id": "1",
+            "name": "foo",
+            "velocity": [
+                {
+                    "date": "2023-12-01",
+                    "velocity_as_story_points_per_day": 3
+                },
+                {
+                    "date": "2023-12-03",
+                    "velocity_as_story_points_per_day": 3
+                },
+                {
+                    "date": "2023-12-04",
+                    "velocity_as_story_points_per_day": 2
+                },
+                {
+                    "date": "2023-12-06",
+                    "velocity_as_story_points_per_day": 3
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "name": "bar",
+            "velocity": [
+                {
+                    "date": "2023-12-01",
+                    "velocity_as_story_points_per_day": 2
+                },
+                {
+                    "date": "2023-12-03",
+                    "velocity_as_story_points_per_day": 4
+                },
+                {
+                    "date": "2023-12-04",
+                    "velocity_as_story_points_per_day": 3
+                },
+                {
+                    "date": "2023-12-06",
+                    "velocity_as_story_points_per_day": 3
+                }
+            ]
+        }
+    ]
+}
