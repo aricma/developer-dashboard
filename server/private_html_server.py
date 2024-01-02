@@ -22,10 +22,11 @@ async def server_error_exception_handler(_, exc: HTTPException):
     if isinstance(exc, MissingAuthenticationTokenCookie):
         return redirect_to_login_page()
     else:
+        error_message = limit_string(str(exc), character_limit=500)
         return HTMLResponse(
             content=make_error_page(
                 error_code="500",
-                message="There was an unknown error raised by the server: \"{str(exc)}\". "
+                message=f"There was an unknown error raised by the server: \"{error_message}\". "
                         "Please create a ticket at https://github.com/aricma/developer-dashboard."
             )
         )
@@ -111,3 +112,11 @@ def unsafe_get_account_from_authentication_token_cookie(request: Request) -> Acc
     if optional_authentication_token:
         return business_logic.get_account_for_jwt(optional_authentication_token)
     raise MissingAuthenticationTokenCookie()
+
+
+def limit_string(value: str, character_limit: int) -> str:
+    length = len(value)
+    if length <= character_limit:
+        return value
+    else:
+        return value[0:character_limit - 3] + "..."
