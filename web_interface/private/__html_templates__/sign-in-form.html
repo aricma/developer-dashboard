@@ -1,0 +1,32 @@
+<div class='container'>
+    <div class='w-100 h-100 d-flex flex-column justify-content-center align-items-center'>
+        <h2 class='mb-3'>Sign In</h2>
+        <form method='post'>
+            <fieldset>
+                <div class='form-group'>
+                    <div class='form-floating mb-3'>
+                        <input type='email' class='form-control' id='register-form-email-input' name='email'
+                               placeholder='name@example.com'>
+                        <label for='register-form-email-input'>Email address</label>
+                    </div>
+                    <div class='form-floating'>
+                        <input type='password' class='form-control' id='register-form-password-input'
+                               name='password'
+                               placeholder='Password'
+                               autocomplete='off'>
+                        <label for='register-form-password-input'>Password</label>
+                    </div>
+                </div>
+                <div class='mt-3'>
+                    <div class='d-grid gap-2 mb-2'>
+                        <button type='submit' class='btn btn-primary'>Sign In</button>
+                    </div>
+                    <p class='flex-box-left-to-right'>
+                        Have no account?
+                        <a href='{link_to_register_form}' class='btn btn-link'>Register!</a>
+                    </p>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

@@ -1,5 +1,7 @@
 .idea
 __pycache__
+bootstrap-5.3.2-examples
+
 .DS_Store
 API.token
 

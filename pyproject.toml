@@ -5,6 +5,12 @@ description = "A dashboard for developer to keep track of the developer velocity
 authors = ["aricma <adrian@aricma.com>"]
 readme = "README.md"
 
+packages = [
+    { include = "server" },
+    { include = "business_logic" },
+    { include = "web_interface" },
+]
+
 [tool.poetry.dependencies]
 python = "^3.8"
 jira = { extras = ["cli"], version = "^3.5.2" }
@@ -14,6 +20,7 @@ uvicorn = { extras = ["standard"], version = "^0.25.0" }
 pyyaml = "^6.0.1"
 pyjwt = "^2.8.0"
 python-multipart = "^0.0.6"
+beautifulsoup4 = "^4.12.2"
 
 
 [build-system]
