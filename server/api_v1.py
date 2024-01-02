@@ -1,8 +1,10 @@
+from http.client import HTTPException
+
 from fastapi import Form, FastAPI
 from starlette.responses import JSONResponse
 
 from server import constants
-from business_logic.errors import InvalidCredentials, ServerError, AccountAlreadyExists
+from business_logic.errors import InvalidCredentials, AccountAlreadyExists
 from business_logic.business_logic import BusinessLogic
 
 app = FastAPI(
@@ -10,8 +12,8 @@ app = FastAPI(
 )
 
 
-@app.exception_handler(ServerError)
-async def server_error_exception_handler(_, exc: BaseException):
+@app.exception_handler(HTTPException)
+async def server_error_exception_handler(_, exc: HTTPException):
     if isinstance(exc, AccountAlreadyExists):
         return JSONResponse(
             status_code=400,

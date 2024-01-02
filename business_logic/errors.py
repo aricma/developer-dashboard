@@ -1,7 +1,9 @@
+from http.client import HTTPException
+
 from business_logic.marshalls import Account
 
 
-class ServerError(Exception):
+class ServerError(HTTPException):
     """
     This class is added to fast apis exception handlers
     """

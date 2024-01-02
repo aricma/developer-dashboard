@@ -1,9 +1,10 @@
+from http.client import HTTPException
+
 from fastapi import FastAPI
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
 
 from business_logic.business_logic import BusinessLogic
-from business_logic.errors import ServerError
 from business_logic.marshalls import Account
 from server import constants
 from web_interface.private.pages.make_dashboard_burn_down_page import make_dashboard_burn_down_page
@@ -16,8 +17,8 @@ private_app = FastAPI(
 )
 
 
-@private_app.exception_handler(ServerError)
-async def server_error_exception_handler(_, exc: BaseException):
+@private_app.exception_handler(HTTPException)
+async def server_error_exception_handler(_, exc: HTTPException):
     if isinstance(exc, MissingAuthenticationTokenCookie):
         return redirect_to_login_page()
     else:
@@ -99,7 +100,7 @@ def redirect_to_logout_page() -> RedirectResponse:
     )
 
 
-class MissingAuthenticationTokenCookie(KeyError):
+class MissingAuthenticationTokenCookie(HTTPException):
 
     def __init__(self):
         super().__init__("Missing Authentication Cookie")
