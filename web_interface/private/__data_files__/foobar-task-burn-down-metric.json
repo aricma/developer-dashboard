@@ -1,0 +1,52 @@
+{
+  "data_points": [
+    {
+      "x": "January",
+      "y": 34
+    },
+    {
+      "x": "February",
+      "y": 30
+    },
+    {
+      "x": "March",
+      "y": 31
+    },
+    {
+      "x": "April",
+      "y": 28
+    },
+    {
+      "x": "May",
+      "y": 27
+    },
+    {
+      "x": "June",
+      "y": 26
+    },
+    {
+      "x": "July",
+      "y": 24
+    },
+    {
+      "x": "August",
+      "y": 20
+    },
+    {
+      "x": "September",
+      "y": 15
+    },
+    {
+      "x": "October",
+      "y": 10
+    },
+    {
+      "x": "November",
+      "y": 4
+    },
+    {
+      "x": "December",
+      "y": 3
+    }
+  ]
+}
