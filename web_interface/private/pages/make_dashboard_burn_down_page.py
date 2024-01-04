@@ -33,7 +33,7 @@ def make_dashboard_burn_down_page(
                 make_dashboard_overview_detail_html(
                     title="Task Burn Down Metric"
                 ),
-                make_chart_html()
+                make_chart_html(data_file_name="./foobar-task-burn-down-metric.json")
             ]
         }
     )

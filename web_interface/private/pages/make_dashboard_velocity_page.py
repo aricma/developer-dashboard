@@ -1,5 +1,4 @@
 from web_interface.private.components.make_chart_html import make_chart_html
-from web_interface.private.components.make_heading_html import make_heading_html
 from web_interface.private.features.make_dashboard_detail_header_html import make_dashboard_overview_detail_html
 from web_interface.private.features.make_dashboard_main_menu_item_html import make_dashboard_main_menu_item_html
 from web_interface.private.utils import make_html_template
@@ -34,7 +33,7 @@ def make_dashboard_velocity_page(
                 make_dashboard_overview_detail_html(
                     title="Developer Velocity"
                 ),
-                make_chart_html()
+                make_chart_html(data_file_name="./foobar-developer-velocity.json")
             ]
         }
     )
