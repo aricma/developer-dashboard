@@ -33,7 +33,10 @@ def make_dashboard_velocity_page(
                 make_dashboard_overview_detail_html(
                     title="Developer Velocity"
                 ),
-                make_chart_html(data_file_name="./foobar-developer-velocity.json")
+                make_chart_html(
+                    data_file_name="./foobar-developer-velocity.json",
+                    chart_type="velocity",
+                )
             ]
         }
     )

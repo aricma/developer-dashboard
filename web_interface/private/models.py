@@ -8,3 +8,8 @@ Alignment = Union[
     Literal["around"],
     Literal["evenly"],
 ]
+
+ChartType = Union[
+    Literal["velocity"],
+    Literal["burn-down"],
+]

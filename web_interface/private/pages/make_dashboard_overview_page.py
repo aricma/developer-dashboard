@@ -41,7 +41,10 @@ def make_dashboard_overview_page(
                         make_overview_dashboard_card_html(
                             title="Current Developer Velocity",
                             subtitle="An overview of the current developer velocity.",
-                            children=make_chart_html(data_file_name="./foobar-developer-velocity.json"),
+                            children=make_chart_html(
+                                data_file_name="./foobar-developer-velocity.json",
+                                chart_type="velocity",
+                            ),
                             description="The Developer Velocity shows the performance of the team. "
                                         "The Velocity should be constant. "
                                         "When the developer velocity drops, your teams has problems. "
@@ -64,7 +67,10 @@ def make_dashboard_overview_page(
                             title="Current Burn Down Overview",
                             subtitle="An overview of the current task burn down metric.",
                             children=[
-                                make_chart_html(data_file_name="./foobar-task-burn-down-metric.json"),
+                                make_chart_html(
+                                    data_file_name="./foobar-task-burn-down-metric.json",
+                                    chart_type="burn-down",
+                                ),
                                 make_warning_html(
                                     title="Rising Task Burn Down Metric",
                                     description="Attention you have a rising Task Burn Down Metric. "
