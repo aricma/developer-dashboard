@@ -15,7 +15,7 @@ start-web-dashboard-locally:
 
 # --- make static web interface html, css and js files -------------------------
 
-statics: all-css-files all-js-files all-images
+statics: all-css-files all-js-files all-data-files all-images
 
 static:
 	mkdir "static"
@@ -28,6 +28,9 @@ all-js-files: static
 
 all-images: static
 	cp web_interface/private/__images__/* static/
+
+all-data-files: static
+	cp web_interface/private/__data_files__/* static/
 
 # --- reset repo ---------------------------------------------------------------
 
