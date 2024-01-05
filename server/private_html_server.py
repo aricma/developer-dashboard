@@ -74,7 +74,8 @@ async def get_dashboard_burn_down_page(request: Request):
 
     return HTMLResponse(
         content=make_dashboard_burn_down_page(
-            user_name=account.name
+            user_name=account.name,
+            data_file_name="./foobar-task-burn-down-metric.json"
         )
     )
 

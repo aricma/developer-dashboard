@@ -6,6 +6,7 @@ from web_interface.private.utils import make_html_template
 
 def make_dashboard_burn_down_page(
         user_name: str,
+        data_file_name: str,
 ) -> str:
     return make_html_template(
         template_name="dashboard",
@@ -34,7 +35,7 @@ def make_dashboard_burn_down_page(
                     title="Task Burn Down Metric"
                 ),
                 make_chart_html(
-                    data_file_name="./foobar-task-burn-down-metric.json",
+                    data_file_name=data_file_name,
                     chart_type="burn-down",
                 )
             ]
