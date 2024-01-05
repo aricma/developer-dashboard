@@ -32,29 +32,42 @@
         }
     }
 
-    function makeVelocityChart(element, data) {
-        const yData = data.map((each) => each.y)
-        const averageValue = yData.reduce((sum, each) => sum + each, 0) / (yData.length || 1)
-        const maxInData = Math.ceil(Math.max(...yData))
+    function getChartYMaxForVelocityData(data) {
+        const allYData = [...data['team_velocity'], ...data['developer_velocity']].map(each => each.y)
+        const averageValue = allYData.reduce((sum, each) => sum + each, 0) / (allYData.length || 1)
+        const maxInData = Math.ceil(Math.max(...allYData))
         const newMaxBasedOnAverage = Math.ceil(averageValue * 3)
-        const max = (newMaxBasedOnAverage > maxInData) ? newMaxBasedOnAverage : maxInData
+        return (newMaxBasedOnAverage > maxInData) ? newMaxBasedOnAverage : maxInData
+    }
+
+    function makeVelocityChart(element, data) {
         new Chart(element, {
             type: 'line',
             data: {
-                labels: data.map((each) => each.x),
-                datasets: [{
-                    data: yData,
-                    lineTension: 0,
-                    borderColor: '#007bff',
-                    borderWidth: 4,
-                    pointBackgroundColor: '#007bff',
-                    backgroundColor: 'transparent',
-                }],
+                datasets: [
+                    {
+                        label: 'Team Velocity',
+                        data: data['team_velocity'],
+                        borderColor: CHART_COLORS.blue,
+                        borderWidth: 4,
+                        pointBackgroundColor: CHART_COLORS.blue,
+                    },
+                    {
+                        label: 'Developer Velocity',
+                        data: data['developer_velocity'],
+                        borderColor: CHART_COLORS.purple,
+                        borderWidth: 4,
+                        pointBackgroundColor: CHART_COLORS.purple,
+                    },
+                ],
             },
             options: {
                 plugins: {
                     legend: {
-                        display: false,
+                        display: true,
+                        labels: {
+                            usePointStyle: true,
+                        },
                     },
                     tooltip: {
                         boxPadding: 3,
@@ -63,10 +76,11 @@
                 scales: {
                     y: {
                         min: 0,
-                        max: max,
-                        grid: {
-                            color: 'rgb(100,100,100)',
-                        },
+                        max: getChartYMaxForVelocityData(data),
+                        grid:
+                            {
+                                color: 'rgb(100,100,100)',
+                            },
                     },
                     x: {
                         grid: {
@@ -79,37 +93,44 @@
     }
 
     function makeBurnDownChart(element, data) {
-        const yData = data.map((each) => each.y)
-
-        const estimation = (ctx, value) => {
-            return ctx.p0.raw?.meta?.estimated || ctx.p1.raw?.meta?.estimated ? value : undefined
-        }
-
+        const yData = data.map(each => each.y);
+        const realBurnDownData = data.filter((each) => !(each?.meta?.estimated))
+        const lastDataPointOfRealDataToConnectTheGraphs = realBurnDownData[realBurnDownData.length - 1]
+        const estimatedBurnDownData = [
+            lastDataPointOfRealDataToConnectTheGraphs,
+            ...data.filter((each) => each?.meta?.estimated),
+        ]
         new Chart(element, {
             type: 'line',
             data: {
                 datasets: [
                     {
-                        data: data,
-                        borderColor: '#007bff',
+                        label: "Finished Tasks",
+                        data: realBurnDownData,
+                        borderColor: CHART_COLORS.blue,
                         borderWidth: 4,
-                        pointBackgroundColor: '#007bff',
-                        segment: {
-                            borderColor: ctx => estimation(ctx, 'rgb(200,200,200)'),
-                            borderDash: ctx => estimation(ctx, [6, 6]),
-                        },
-                    },
-                    {
-                        data: data.filter((each) => !(each?.meta?.estimated)),
+                        pointBackgroundColor: CHART_COLORS.blue,
                         backgroundColor: CHART_COLORS.yellow,
                         fill: true,
+                    },
+                    {
+                        label: "Estimated Task Burn Down",
+                        data: estimatedBurnDownData,
+                        borderColor: CHART_COLORS.grey,
+                        borderWidth: 4,
+                        pointBackgroundColor: CHART_COLORS.grey,
+                        borderDash: [6, 6],
+                        fill: false,
                     },
                 ],
             },
             options: {
                 plugins: {
                     legend: {
-                        display: false,
+                        display: true,
+                        labels: {
+                            usePointStyle: true,
+                        },
                     },
                     tooltip: {
                         boxPadding: 3,
