@@ -26,27 +26,45 @@
     },
     {
       "x": "July",
-      "y": 24
+      "y": 24,
+      "meta": {
+        "estimated": true
+      }
     },
     {
       "x": "August",
-      "y": 20
+      "y": 20,
+      "meta": {
+        "estimated": true
+      }
     },
     {
       "x": "September",
-      "y": 15
+      "y": 15,
+      "meta": {
+        "estimated": true
+      }
     },
     {
       "x": "October",
-      "y": 10
+      "y": 10,
+      "meta": {
+        "estimated": true
+      }
     },
     {
       "x": "November",
-      "y": 4
+      "y": 4,
+      "meta": {
+        "estimated": true
+      }
     },
     {
       "x": "December",
-      "y": 3
+      "y": 3,
+      "meta": {
+        "estimated": true
+      }
     }
   ]
 }
