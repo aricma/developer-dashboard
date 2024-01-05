@@ -64,6 +64,14 @@
                     y: {
                         min: 0,
                         max: max,
+                        grid: {
+                            color: 'rgb(100,100,100)',
+                        },
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgb(100,100,100)',
+                        },
                     },
                 },
             },
@@ -72,19 +80,31 @@
 
     function makeBurnDownChart(element, data) {
         const yData = data.map((each) => each.y)
+
+        const estimation = (ctx, value) => {
+            return ctx.p0.raw?.meta?.estimated || ctx.p1.raw?.meta?.estimated ? value : undefined
+        }
+
         new Chart(element, {
             type: 'line',
             data: {
-                labels: data.map((each) => each.x),
-                datasets: [{
-                    data: yData,
-                    lineTension: 0,
-                    borderColor: '#007bff',
-                    borderWidth: 4,
-                    pointBackgroundColor: '#007bff',
-                    backgroundColor: CHART_COLORS.yellow,
-                    fill: true,
-                }],
+                datasets: [
+                    {
+                        data: data,
+                        borderColor: '#007bff',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#007bff',
+                        segment: {
+                            borderColor: ctx => estimation(ctx, 'rgb(200,200,200)'),
+                            borderDash: ctx => estimation(ctx, [6, 6]),
+                        },
+                    },
+                    {
+                        data: data.filter((each) => !(each?.meta?.estimated)),
+                        backgroundColor: CHART_COLORS.yellow,
+                        fill: true,
+                    },
+                ],
             },
             options: {
                 plugins: {
@@ -99,6 +119,14 @@
                     y: {
                         min: 0,
                         max: Math.ceil(Math.max(...yData) * 1.2),
+                        grid: {
+                            color: 'rgb(100,100,100)',
+                        },
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgb(100,100,100)',
+                        },
                     },
                 },
             },
