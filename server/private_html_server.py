@@ -2,7 +2,7 @@ from http.client import HTTPException
 
 from fastapi import FastAPI
 from starlette.requests import Request
-from starlette.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
+from starlette.responses import HTMLResponse, FileResponse, RedirectResponse
 
 from business_logic.business_logic import BusinessLogic
 from business_logic.marshalls import Account
@@ -70,6 +70,8 @@ async def get_dashboard_velocity_page(request: Request):
 @private_app.get("/dashboard/burn-down")
 async def get_dashboard_burn_down_page(request: Request):
     account = unsafe_get_account_from_authentication_token_cookie(request)
+    data = business_logic.get_task_burn_down_data_for_account(account=account)
+
     return HTMLResponse(
         content=make_dashboard_burn_down_page(
             user_name=account.name

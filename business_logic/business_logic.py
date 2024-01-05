@@ -25,6 +25,9 @@ class BusinessLogic:
         self._path_to_developers_json_file = path_to_developers_json_file
         self._path_to_tasks_json_file = path_to_tasks_json_file
 
+    def get_task_burn_down_data_for_account(self, account: Account) -> dict:
+        ...
+
     def get_account_for_jwt(self, authentication_token: str) -> Account:
         account_info = AccountInfo(
             **jwt.decode(
