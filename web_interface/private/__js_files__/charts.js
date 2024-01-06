@@ -110,7 +110,7 @@
                         borderColor: CHART_COLORS.blue,
                         borderWidth: 4,
                         pointBackgroundColor: CHART_COLORS.blue,
-                        backgroundColor: CHART_COLORS.yellow,
+                        backgroundColor: 'rgb(255, 205, 86, .75)',
                         fill: true,
                     },
                     {
