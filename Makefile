@@ -1,10 +1,14 @@
+# --- constants ----------------------------------------------------------------
+
+static_folder_name = ".static"
+
 # --- shortcuts ----------------------------------------------------------------
 
 dev: start-web-dashboard-locally
 
 .PHONY: server
 server:
-	uvicorn server.__main__:app --reload
+	STATIC_FOLDER_NAME=$(static_folder_name) uvicorn server.__main__:app --reload
 
 build: reset statics
 
@@ -18,24 +22,24 @@ start-web-dashboard-locally:
 statics: all-css-files all-js-files all-data-files all-images
 
 static:
-	mkdir "static"
+	mkdir $(static_folder_name)
 
 all-css-files: static
-	cp web_interface/private/__css_components__/* static/
+	cp web_interface/private/__css_components__/* $(static_folder_name)/
 
 all-js-files: static
-	cp web_interface/private/__js_files__/* static/
+	cp web_interface/private/__js_files__/* $(static_folder_name)/
 
 all-images: static
-	cp web_interface/private/__images__/* static/
+	cp web_interface/private/__images__/* $(static_folder_name)/
 
 all-data-files: static
-	cp web_interface/private/__data_files__/* static/
+	cp web_interface/private/__data_files__/* $(static_folder_name)/
 
 # --- reset repo ---------------------------------------------------------------
 
 reset:
-	rm -rf static
+	rm -rf $(static_folder_name)
 
 # --- functions ----------------------------------------------------------------
 
