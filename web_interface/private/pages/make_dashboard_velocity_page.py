@@ -1,5 +1,5 @@
 from web_interface.private.components.make_chart_html import make_chart_html
-from web_interface.private.features.make_dashboard_detail_header_html import make_dashboard_overview_detail_html
+from web_interface.private.features.make_dashboard_detail_header_html import make_dashboard_overview_detail_header_html
 from web_interface.private.features.make_dashboard_main_menu_item_html import make_dashboard_main_menu_item_html
 from web_interface.private.features.make_dashboard_velocity_detail_body_html import \
     make_dashboard_velocity_detail_body_html
@@ -32,7 +32,7 @@ def make_dashboard_velocity_page(
                 ),
             ],
             "detail_children": [
-                make_dashboard_overview_detail_html(
+                make_dashboard_overview_detail_header_html(
                     title="Developer Velocity"
                 ),
                 make_chart_html(
