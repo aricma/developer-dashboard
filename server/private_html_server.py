@@ -7,6 +7,7 @@ from starlette.responses import HTMLResponse, FileResponse, RedirectResponse
 from business_logic.business_logic import BusinessLogic
 from business_logic.marshalls import Account
 from server import constants
+from web_interface.models import Alert
 from web_interface.private.pages.make_dashboard_burn_down_page import make_dashboard_burn_down_page
 from web_interface.private.pages.make_dashboard_overview_page import make_dashboard_overview_page
 from web_interface.private.pages.make_dashboard_velocity_page import make_dashboard_velocity_page
@@ -52,7 +53,14 @@ async def get_dashboard_overview_page(request: Request):
     account = unsafe_get_account_from_authentication_token_cookie(request)
     return HTMLResponse(
         content=make_dashboard_overview_page(
-            user_name=account.name
+            user_name=account.name,
+            # burn_down_warnings=[
+            #     Alert(
+            #         title="Rising Task Burn Down Metric",
+            #         description="Attention you have a rising Task Burn Down Metric. "
+            #                     "Make sure this happened because of changes in scope."
+            #     )
+            # ]
         )
     )
 
