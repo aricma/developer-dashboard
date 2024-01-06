@@ -98,6 +98,10 @@ class BusinessLogic:
         if not password_is_valid:
             raise InvalidCredentials()
 
+        return self.unsafe_create_authentication_token(account)
+
+    @staticmethod
+    def unsafe_create_authentication_token(account: Account) -> str:
         return jwt.encode(
             payload={
                 "name": account.name,
