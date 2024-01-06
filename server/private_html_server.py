@@ -1,12 +1,14 @@
 from http.client import HTTPException
+from typing import Union
 
 from fastapi import FastAPI
 from starlette.requests import Request
-from starlette.responses import HTMLResponse, FileResponse, RedirectResponse
+from starlette.responses import Response, HTMLResponse, FileResponse, RedirectResponse
 
 from business_logic.business_logic import BusinessLogic
 from business_logic.marshalls import Account
 from server import constants
+from server.authentication_utils import create_authentication_token_cookie_value
 from web_interface.models import Alert
 from web_interface.private.pages.make_dashboard_burn_down_page import make_dashboard_burn_down_page
 from web_interface.private.pages.make_dashboard_overview_page import make_dashboard_overview_page
@@ -44,7 +46,11 @@ business_logic = BusinessLogic(
 async def check_for_authentication_cookie(request: Request, call_next):
     optional_authentication_token = request.cookies.get(constants.AUTHENTICATION_TOKEN_COOKIE_NAME)
     if authentication_token_is_valid(token=optional_authentication_token):
-        return await call_next(request)
+        response = await call_next(request)
+        return refresh_authentication_token_cookie_value(
+            response=response,
+            old_authentication_token=optional_authentication_token
+        )
     return redirect_to_login_page()
 
 
@@ -116,6 +122,13 @@ class MissingAuthenticationTokenCookie(HTTPException):
 
     def __init__(self):
         super().__init__("Missing Authentication Cookie")
+
+
+def refresh_authentication_token_cookie_value(response: Response, old_authentication_token: str) -> Response:
+    account = business_logic.get_account_for_jwt(old_authentication_token)
+    authentication_token = business_logic.unsafe_create_authentication_token(account)
+    response.headers["Set-Cookie"] = create_authentication_token_cookie_value(authentication_token)
+    return response
 
 
 def unsafe_get_account_from_authentication_token_cookie(request: Request) -> Account:
