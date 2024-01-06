@@ -1,11 +1,11 @@
 import os
 from pathlib import Path
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union, Optional, Literal
 from uuid import uuid4
 from bs4 import BeautifulSoup
 from bs4.formatter import HTMLFormatter
 
-from web_interface.private.constants import PATH_TO_HTML_TEMPLATES
+from web_interface.private.constants import PATH_TO_HTML_TEMPLATES, PATH_TO_TEXT_FILES
 from web_interface.private.types import SkipMissingDict, KeepMissingDict
 
 
@@ -33,12 +33,25 @@ def make_html_template(template_name: str, props: Props = None) -> str:
 
 
 def resolve_template_name(template_name: str) -> str:
-    if not template_name.endswith(".html"):
-        return template_name + ".html"
-    if template_name.endswith("."):
-        return template_name + "html"
+    return resolve_file_name(
+        file_name=template_name,
+        extension="html"
+    )
+
+
+FileExtension = Union[
+    Literal["html"],
+    Literal["txt"],
+]
+
+
+def resolve_file_name(file_name: str, extension: FileExtension) -> str:
+    if not file_name.endswith("." + extension):
+        return file_name + "." + extension
+    if file_name.endswith("."):
+        return file_name + extension
     else:
-        return template_name
+        return file_name
 
 
 def make_html_element_from_file(path: Union[Path, str], props: Props) -> str:
@@ -81,3 +94,19 @@ def resolve_html_element(html_element: HTMLElement) -> Optional[str]:
 
 def join_html(html_items: List[str]) -> Optional[str]:
     return os.linesep.join(html_items)
+
+
+def read_text_file(text_file_name: str) -> str:
+    return read_file(PATH_TO_TEXT_FILES / resolve_text_file_name(text_file_name))
+
+
+def resolve_text_file_name(text_file_name: str) -> str:
+    return resolve_file_name(
+        file_name=text_file_name,
+        extension="txt"
+    )
+
+
+def read_file(path: Union[Path, str]) -> str:
+    with open(path, "r") as reader:
+        return reader.read()
