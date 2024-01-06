@@ -4,15 +4,23 @@ static_folder_name = ".static"
 
 # --- shortcuts ----------------------------------------------------------------
 
-dev: start-web-dashboard-locally
+ci: lint
 
-.PHONY: server
-server:
-	STATIC_FOLDER_NAME=$(static_folder_name) uvicorn server.__main__:app --reload
+dev: server
 
 build: reset statics
 
 # ------------------------------------------------------------------------------
+
+lint:
+	ruff --fix
+	mypy business_logic
+	mypy web_interface
+	mypy server
+
+.PHONY: server
+server:
+	STATIC_FOLDER_NAME=$(static_folder_name) uvicorn server.__main__:app --reload
 
 start-web-dashboard-locally:
 	open ./static/index.html
