@@ -1,4 +1,4 @@
-from typing import Union, Literal, List, Dict
+from typing import Union, Literal, Dict
 
 from web_interface.private.models import Alignment
 from web_interface.private.utils import make_html_template

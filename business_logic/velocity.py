@@ -40,7 +40,10 @@ class DeveloperVelocityTracker:
         return self._velocities[developer]
 
     def get_average_velocity(self) -> int:
-        return median([each.story_points_per_day for each in self._velocities.values()])
+        return median([
+            developer_velocity.story_points_per_day
+            for developer_velocity in self._velocities.values()
+        ])
 
     def add_velocity(self, developer_velocity: DeveloperVelocity) -> None:
         if developer_velocity.developer not in self._velocities:

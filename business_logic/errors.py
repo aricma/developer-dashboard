@@ -26,4 +26,4 @@ class AccountAlreadyExists(KeyError, ServerError):
 class InvalidCredentials(ValueError, ServerError):
 
     def __init__(self):
-        super().__init__(f"Given email and password are invalid.")
+        super().__init__("Given email and password are invalid.")
