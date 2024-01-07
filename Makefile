@@ -1,6 +1,7 @@
 # --- constants ----------------------------------------------------------------
 
 static_folder_name = ".static"
+tasks_dummy_data_file_path = "./dummy_data/tasks_dummy_data.json"
 
 # --- shortcuts ----------------------------------------------------------------
 
@@ -8,7 +9,7 @@ ci: lint
 
 dev: server
 
-build: reset statics
+build: reset statics $(tasks_dummy_data_file_path)
 
 # ------------------------------------------------------------------------------
 
@@ -20,10 +21,12 @@ lint:
 
 .PHONY: server
 server:
-	STATIC_FOLDER_NAME=$(static_folder_name) uvicorn server.__main__:app --reload
+	STATIC_FOLDER_NAME=$(static_folder_name) \
+	VELOCITY_DUMMY_DATA_FILE_PATH=$(tasks_dummy_data_file_path) \
+	uvicorn server.__main__:app --reload
 
-start-web-dashboard-locally:
-	open ./static/index.html
+$(tasks_dummy_data_file_path):
+	python dummy_data/make_random_tasks.py > $(tasks_dummy_data_file_path)
 
 # --- make static web interface html, css and js files -------------------------
 
@@ -39,15 +42,21 @@ all-js-files: static
 	cp web_interface/private/__js_files__/* $(static_folder_name)/
 
 all-images: static
-	cp web_interface/private/__images__/* $(static_folder_name)/
+	@echo "No images in __images__ folder"
+	#cp web_interface/private/__images__/* $(static_folder_name)/
 
 all-data-files: static
 	cp web_interface/private/__data_files__/* $(static_folder_name)/
 
 # --- reset repo ---------------------------------------------------------------
 
-reset:
+reset: reset-statics reset-dummy-data
+
+reset-statics:
 	rm -rf $(static_folder_name)
+
+reset-dummy-data:
+	rm -rf $(tasks_dummy_data_file_path)
 
 # --- functions ----------------------------------------------------------------
 
