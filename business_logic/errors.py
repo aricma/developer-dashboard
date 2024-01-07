@@ -27,3 +27,9 @@ class InvalidCredentials(ValueError, ServerError):
 
     def __init__(self):
         super().__init__("Given email and password are invalid.")
+
+
+class DummyDataNotFoundError(FileNotFoundError, ServerError):
+
+    def __init__(self):
+        super().__init__("Velocity Dummy Data is not created.")
