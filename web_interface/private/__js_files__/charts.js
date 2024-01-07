@@ -38,7 +38,9 @@
     function getChartYMaxForVelocityData(data) {
         const allYData = [
             // ...data['average_developer_velocity'],
-            ...data['developer_velocity'],
+            // we take the data that is available to get the max value for the y axis
+            // if there is no data for developer_velocity we fallback and display average_developer_velocity
+            ...(data['developer_velocity'].length > 0 ? data['developer_velocity'] : data['average_developer_velocity']),
         ].map(each => each.y)
         const averageValue = allYData.reduce((sum, each) => sum + each, 0) / (allYData.length || 1)
         const maxInData = Math.ceil(Math.max(...allYData))
