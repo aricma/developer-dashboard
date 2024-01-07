@@ -8,6 +8,7 @@ from web_interface.private.utils import make_html_template, read_text_file
 
 def make_dashboard_velocity_page(
         user_name: str,
+        velocity_chart_data_file_name: str,
 ) -> str:
     return make_html_template(
         template_name="dashboard",
@@ -36,7 +37,7 @@ def make_dashboard_velocity_page(
                     title="Developer Velocity"
                 ),
                 make_chart_html(
-                    data_file_name="./foobar-developer-velocity.json",
+                    data_file_name=velocity_chart_data_file_name,
                     chart_type="velocity",
                 ),
                 make_dashboard_velocity_detail_body_html(

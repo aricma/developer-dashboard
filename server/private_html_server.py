@@ -72,9 +72,11 @@ async def get_dashboard_overview_page(request: Request):
 @private_app.get("/dashboard/velocity")
 async def get_dashboard_velocity_page(request: Request):
     account = unsafe_get_account_from_authentication_token_cookie(request)
+    data_file_name = business_logic.get_velocity_data_file_name_for_developer(account)
     return HTMLResponse(
         content=make_dashboard_velocity_page(
-            user_name=account.name
+            user_name=account.name,
+            velocity_chart_data_file_name=data_file_name
         )
     )
 
