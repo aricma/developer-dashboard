@@ -72,9 +72,9 @@ class BusinessLogic:
         self._path_to_tasks_json_file = path_to_tasks_json_file
         self._velocity_tracker = DeveloperVelocityTracker()
 
-    def get_velocity_data_file_name_for_developer(self, account: Account) -> str:
+    def get_velocity_data_file_name_for_developer(self, account: Account, time_in_weeks: int) -> str:
         # TODO: this function does 2 things
-        data = self._get_velocity_data_for_developer(account)
+        data = self._get_velocity_data_for_developer(account, time_in_weeks=time_in_weeks)
         formatted_data = self._pretty_format_json(dataclasses.asdict(data))
         file_name = self._make_velocity_data_file_name_for_developer(
             developer_id=account.id,
@@ -110,8 +110,8 @@ class BusinessLogic:
         with open(path, "w") as writer:
             writer.write(data)
 
-    def _get_velocity_data_for_developer(self, account: Account) -> VelocityChartDataFile:
-        tracking_start_date = str(datetime.date.today() - datetime.timedelta(weeks=8))
+    def _get_velocity_data_for_developer(self, account: Account, time_in_weeks: int) -> VelocityChartDataFile:
+        tracking_start_date = str(datetime.date.today() - datetime.timedelta(weeks=time_in_weeks))
         dummy_data_tasks = self._get_dummy_data_tasks()
         trackable_finished_tasks = self._dummy_data_to_trackable_data(
             self._filter_tasks_before_given_start_date(
@@ -128,8 +128,22 @@ class BusinessLogic:
         )
         return VelocityChartDataFile(
             data_points=VelocityChartData(
-                developer_velocity=self._velocity_to_chart_data_points(developer_velocity_data),
-                average_developer_velocity=self._velocity_to_chart_data_points(average_developer_velocity_data),
+                developer_velocity=self._sort_data_points_by_date(
+                    data_points=self._velocity_to_chart_data_points(
+                        velocity=self._filter_velocity_before_given_start_date(
+                            velocity=developer_velocity_data,
+                            start_date=tracking_start_date,
+                        )
+                    ),
+                ),
+                average_developer_velocity=self._sort_data_points_by_date(
+                    data_points=self._velocity_to_chart_data_points(
+                        velocity=self._filter_velocity_before_given_start_date(
+                            velocity=average_developer_velocity_data,
+                            start_date=tracking_start_date,
+                        )
+                    ),
+                ),
             )
         )
 
@@ -153,6 +167,18 @@ class BusinessLogic:
             )
             for dummy_data_task in dummy_data
         ]
+
+    @staticmethod
+    def _filter_velocity_before_given_start_date(velocity: Velocity, start_date: str) -> Velocity:
+        return {
+            date: story_points
+            for date, story_points in velocity.items()
+            if to_date(date) >= to_date(start_date)
+        }
+
+    @staticmethod
+    def _sort_data_points_by_date(data_points: VelocityChartDataPoints) -> VelocityChartDataPoints:
+        return sorted(data_points, key=lambda data_point: data_point.x)
 
     @staticmethod
     def _velocity_to_chart_data_points(velocity: Velocity) -> VelocityChartDataPoints:
