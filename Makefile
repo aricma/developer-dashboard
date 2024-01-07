@@ -35,20 +35,20 @@ $(tasks_dummy_data_file_path):
 
 statics: all-css-files all-js-files all-data-files all-images
 
-static:
+$(static_folder_name):
 	mkdir $(static_folder_name)
 
-all-css-files: static
+all-css-files: $(static_folder_name)
 	cp web_interface/private/__css_components__/* $(static_folder_name)/
 
-all-js-files: static
+all-js-files: $(static_folder_name)
 	cp web_interface/private/__js_files__/* $(static_folder_name)/
 
-all-images: static
+all-images: $(static_folder_name)
 	@echo "No images in __images__ folder"
 	#cp web_interface/private/__images__/* $(static_folder_name)/
 
-all-data-files: static
+all-data-files: $(static_folder_name)
 	cp web_interface/private/__data_files__/* $(static_folder_name)/
 
 # --- reset repo ---------------------------------------------------------------
