@@ -9,16 +9,9 @@ Date = str
 
 
 @dataclasses.dataclass
-class Task:
+class FinishedTask:
     id: TaskID
-    title: str
-    description: str
-    date_created: Date
+    date_started: Date
     date_finished: Date
-    story_points: int
+    story_points: float
     assignees: List[DeveloperID]
-    subtasks: List[TaskID]
-
-
-FinishedTask = Task
-TaskInProgress = Task
