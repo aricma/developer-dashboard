@@ -2,7 +2,7 @@ from typing import List, Dict
 
 from pydantic import BaseModel
 
-from business_logic.models import Permissions
+from domain_models.task import Permissions
 
 
 class _VelocityDatapoint(BaseModel):

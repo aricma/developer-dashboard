@@ -4,8 +4,8 @@ from fastapi import Form, FastAPI
 from starlette.responses import JSONResponse
 
 from server import constants
-from business_logic.errors import InvalidCredentials, AccountAlreadyExists
-from business_logic.business_logic import BusinessLogic
+from business_logic.errors import InvalidCredentialsError, AccountAlreadyExistsError
+from business_logic.__init__ import BusinessLogic
 
 app = FastAPI(
     title="Developer Dashboard API",
@@ -14,12 +14,12 @@ app = FastAPI(
 
 @app.exception_handler(HTTPException)
 async def server_error_exception_handler(_, exc: HTTPException):
-    if isinstance(exc, AccountAlreadyExists):
+    if isinstance(exc, AccountAlreadyExistsError):
         return JSONResponse(
             status_code=400,
             content={"message": str(exc)},
         )
-    if isinstance(exc, InvalidCredentials):
+    if isinstance(exc, InvalidCredentialsError):
         return JSONResponse(
             status_code=403,
             content={"message": str(exc)},

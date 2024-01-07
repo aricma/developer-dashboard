@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from starlette.requests import Request
 from starlette.responses import Response, HTMLResponse, FileResponse, RedirectResponse
 
-from business_logic.business_logic import BusinessLogic
+from business_logic.__init__ import BusinessLogic
 from business_logic.marshalls import Account
 from server import constants
 from server.authentication_utils import create_authentication_token_cookie_value
