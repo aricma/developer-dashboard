@@ -1,4 +1,4 @@
-/* globals Chart:false */
+/* globals Chart, moment:false */
 
 (() => {
     'use strict'
@@ -19,25 +19,35 @@
         const chartType = element.dataset.chartType
         fetch(fileName)
             .then(response => response.json())
-            .then(data => makeChart(element, data['data_points'], chartType))
+            .then(data => makeChart(element, data, chartType))
             .catch(error => console.error('Error:', error))
     })
 
     function makeChart(element, data, chartType) {
         switch (chartType) {
             case 'velocity':
-                return makeVelocityChart(element, data)
+                return makeVelocityChart(element, {
+                    average_developer_velocity: data['data_points']["average_developer_velocity"],
+                    developer_velocity: data['data_points']["developer_velocity"]
+                })
             case 'burn-down':
-                return makeBurnDownChart(element, data)
+                return makeBurnDownChart(element, data['data_points'])
         }
     }
 
     function getChartYMaxForVelocityData(data) {
-        const allYData = [...data['team_velocity'], ...data['developer_velocity']].map(each => each.y)
+        const allYData = [
+            // ...data['average_developer_velocity'],
+            ...data['developer_velocity'],
+        ].map(each => each.y)
         const averageValue = allYData.reduce((sum, each) => sum + each, 0) / (allYData.length || 1)
         const maxInData = Math.ceil(Math.max(...allYData))
         const newMaxBasedOnAverage = Math.ceil(averageValue * 3)
         return (newMaxBasedOnAverage > maxInData) ? newMaxBasedOnAverage : maxInData
+    }
+
+    function sortVelocityDataPoints(dataPoints) {
+        return dataPoints.sort((d1, d2) => moment(d1['x']).diff(moment(d2['x'])))
     }
 
     function makeVelocityChart(element, data) {
@@ -46,15 +56,15 @@
             data: {
                 datasets: [
                     {
-                        label: 'Team Velocity',
-                        data: data['team_velocity'],
+                        label: 'Average Developer Velocity(of your team)',
+                        data: sortVelocityDataPoints(data['average_developer_velocity']),
                         borderColor: CHART_COLORS.blue,
                         borderWidth: 4,
                         pointBackgroundColor: CHART_COLORS.blue,
                     },
                     {
                         label: 'Developer Velocity',
-                        data: data['developer_velocity'],
+                        data: sortVelocityDataPoints(data['developer_velocity']),
                         borderColor: CHART_COLORS.purple,
                         borderWidth: 4,
                         pointBackgroundColor: CHART_COLORS.purple,
@@ -83,6 +93,10 @@
                             },
                     },
                     x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'YYYY-MM-DD',
+                        },
                         grid: {
                             color: 'rgb(100,100,100)',
                         },
@@ -93,7 +107,7 @@
     }
 
     function makeBurnDownChart(element, data) {
-        const yData = data.map(each => each.y);
+        const yData = data.map(each => each.y)
         const realBurnDownData = data.filter((each) => !(each?.meta?.estimated))
         const lastDataPointOfRealDataToConnectTheGraphs = realBurnDownData[realBurnDownData.length - 1]
         const estimatedBurnDownData = [
@@ -105,7 +119,7 @@
             data: {
                 datasets: [
                     {
-                        label: "Finished Tasks",
+                        label: 'Finished Tasks',
                         data: realBurnDownData,
                         borderColor: CHART_COLORS.blue,
                         borderWidth: 4,
@@ -114,7 +128,7 @@
                         fill: true,
                     },
                     {
-                        label: "Estimated Task Burn Down",
+                        label: 'Estimated Task Burn Down',
                         data: estimatedBurnDownData,
                         borderColor: CHART_COLORS.grey,
                         borderWidth: 4,
