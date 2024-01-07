@@ -9,6 +9,16 @@ To get the teams velocity we take the median story points of all developers in a
 A task can have multiple developers assigned to it(e.g. PairProgramming or GroupProgramming).
 For now, each developer assigned to a task will claim the same amount of story points, when a task is finished.
 
+How much historical data is relevant to judge the velocity of your team or single developer. A year or up to ten years
+of daily developer velocity can have wildly different velocities over time. Management changes. Team members change.
+Experience changes. All influence the way teams and developer estimate. A changing estimation influences the velocity
+tracked.
+
+Developers stay with a company on average for 2 years. This reduces the possible vast amounts of data that have to be
+parsed for each developer to get the velocity over there entire career at a company.
+
+ℹ️ Based on a gut feeling, the developer velocity will be estimated on the tasks finished in the last eight weeks.
+
 ## Task Burn Down
 
 The Task Burn Down Chart show the estimated time when a task will be finished by the team.
