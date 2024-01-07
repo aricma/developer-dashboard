@@ -1,0 +1,11 @@
+The Developer Velocity shows the performance of you and your team.
+The graph shows your developer velocity in relation to the average developer velocity of your team.
+The Velocity should be constant. A drop in developer velocity should have a reason. A good reason would be the team trying a new way to estimate tasks.
+If the estimation is off the velocity changes. Another good reason would be the assignment of new responsibilities. If a developer is distracted the performance can drop.
+
+When the teams velocity drops with no good reason, your teams has problems. This is a very important indicator and most likely originates in bad code leading to problems.
+We recommend that the teams spends more time writing good code.
+
+On the other hand if the velocity is up it might be that the developers are not spending enough time keeping the code clean.
+This means your team pushes pad code into master and pretty soon the velocity will drop because the bad code is blocking development.
+This will slow your team down in the long run. We recommend you spend more time cleaning your code.

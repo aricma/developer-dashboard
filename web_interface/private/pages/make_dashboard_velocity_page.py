@@ -90,7 +90,7 @@ def make_dashboard_velocity_page(
                     ]
                 ),
                 make_dashboard_velocity_detail_body_html(
-                    description=read_text_file("velocity-overview"),
+                    description=read_text_file("velocity-detail-description"),
                 )
             ]
         }
