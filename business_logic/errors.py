@@ -12,7 +12,7 @@ class ServerError(HTTPException):
         super().__init__(f"ServerError: {message}")
 
 
-class AccountAlreadyExists(KeyError, ServerError):
+class AccountAlreadyExistsError(KeyError, ServerError):
 
     def __init__(self, account: Account):
         super().__init__(
@@ -23,7 +23,7 @@ class AccountAlreadyExists(KeyError, ServerError):
         )
 
 
-class InvalidCredentials(ValueError, ServerError):
+class InvalidCredentialsError(ValueError, ServerError):
 
     def __init__(self):
         super().__init__("Given email and password are invalid.")
