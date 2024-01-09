@@ -3,10 +3,8 @@ from datetime import timedelta as duration
 from dateutil.parser import parse as to_date
 from typing import Dict, List
 
-from domain_models.task import FinishedTask
-
-Date = str
-StoryPoints = float
+from business_logic.models import StoryPoints
+from domain_models.task import FinishedTask, Date
 
 Velocity = Dict[Date, StoryPoints]
 
