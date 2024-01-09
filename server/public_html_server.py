@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Form
 from starlette.responses import HTMLResponse, FileResponse, RedirectResponse
 
-from business_logic.__init__ import BusinessLogic
+from business_logic._business_logic import BusinessLogic
 from server import constants
 from server.authentication_utils import create_authentication_token_cookie_value, \
     create_expired_authentication_token_cookie_value

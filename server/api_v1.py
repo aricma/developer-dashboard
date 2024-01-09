@@ -5,7 +5,7 @@ from starlette.responses import JSONResponse
 
 from server import constants
 from business_logic.errors import InvalidCredentialsError, AccountAlreadyExistsError
-from business_logic.__init__ import BusinessLogic
+from business_logic._business_logic import BusinessLogic
 
 app = FastAPI(
     title="Developer Dashboard API",
