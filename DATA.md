@@ -18,6 +18,7 @@ Developers stay with a company on average for 2 years. This reduces the possible
 parsed for each developer to get the velocity over there entire career at a company.
 
 ℹ️ Based on a gut feeling, the developer velocity will be estimated on the tasks finished in the last eight weeks.
+ℹ️ The average developer velocity used to calculate the burn down is always the median(not mean) of the last 3 weeks. 
 
 ## Task Burn Down
 
