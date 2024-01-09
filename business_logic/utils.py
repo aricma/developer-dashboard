@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
+from datetime import date
 from typing import Generic, TypeVar, Callable
+
+from business_logic.models import Date
 
 
 def print_api_title() -> None:
@@ -70,3 +73,7 @@ class FileUpdater(UpdaterInterface):
         file_content = self._reader.unsafe_read()
         updated_file_content = self._update(file_content)
         self._writer.unsafe_write(updated_file_content)
+
+
+def make_date(year: int, month: int, day: int) -> Date:
+    return str(date(year, month, day))
