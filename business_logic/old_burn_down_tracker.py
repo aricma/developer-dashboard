@@ -23,7 +23,7 @@ class BurnDownMetric:
     done_in: str  # representation of remaining years, months, weeks, and days
 
 
-class BurnDownTracker:
+class OldBurnDownTracker:
 
     _metrics: List[BurnDownMetric]
     _developer_velocity_per_day: int
@@ -89,7 +89,7 @@ if __name__ == '__main__':
         )
     ]
 
-    bdt = BurnDownTracker(developer_velocity_per_day=2)
+    bdt = OldBurnDownTracker(developer_velocity_per_day=2)
 
     for each in tasks:
         bdt.add_task(each)
