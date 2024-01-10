@@ -5,7 +5,7 @@ tasks_dummy_data_file_path = "./dummy_data/tasks_dummy_data.json"
 
 # --- shortcuts ----------------------------------------------------------------
 
-ci: lint tests
+ci: refactor lint tests  # this runs locally not the actual ci
 
 dev: build server
 
@@ -13,8 +13,11 @@ build: reset statics $(tasks_dummy_data_file_path)
 
 # ------------------------------------------------------------------------------
 
-lint:
+refactor:
 	ruff --fix
+
+lint:
+	ruff --check
 	mypy business_logic
 	mypy web_interface
 	mypy server
