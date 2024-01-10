@@ -45,8 +45,7 @@ all-js-files: $(static_folder_name)
 	cp web_interface/private/__js_files__/* $(static_folder_name)/
 
 all-images: $(static_folder_name)
-	@echo "No images in __images__ folder"
-	#cp web_interface/private/__images__/* $(static_folder_name)/
+	cp web_interface/private/__images__/* $(static_folder_name)/
 
 all-data-files: $(static_folder_name)
 	cp web_interface/private/__data_files__/* $(static_folder_name)/
