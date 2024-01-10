@@ -1,17 +1,16 @@
-from web_interface.private.constants import PATH_TO_HTML_TEMPLATES
-from web_interface.private.utils import make_html_element_from_file, HTMLElement, resolve_html_element
+from web_interface.private.utils import HTMLElement, resolve_html_element, make_html_template
 
 
 def make_html_file(
-    title: str,
-    headers: HTMLElement = None,
-    body: HTMLElement = None,
+        title: str,
+        headers: HTMLElement = None,
+        body: HTMLElement = None,
 ) -> str:
-    return make_html_element_from_file(
-        path=PATH_TO_HTML_TEMPLATES / "html-file.html",
+    return make_html_template(
+        template_name="html-file",
         props={
             "title": title,
-            "headers": resolve_html_element(headers) or "",
-            "body": resolve_html_element(body) or "",
+            "headers": resolve_html_element(headers),
+            "body": resolve_html_element(body),
         }
     )

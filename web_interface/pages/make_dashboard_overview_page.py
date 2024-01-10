@@ -10,7 +10,7 @@ from web_interface.private.features.make_overview_dashboard_card_html import mak
 from web_interface.private.utils import (
     make_html_template,
     read_text_file,
-    join_html
+    join_html, HTMLElement
 )
 
 
@@ -82,7 +82,7 @@ def make_dashboard_overview_page(
     )
 
 
-def make_warnings(warnings: List[Alert]) -> str:
+def make_warnings(warnings: List[Alert]) -> HTMLElement:
     return join_html([
         make_warning_html(
             title=each.title,

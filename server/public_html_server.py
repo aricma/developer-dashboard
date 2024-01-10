@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import FastAPI, Form
 from starlette.responses import HTMLResponse, FileResponse, RedirectResponse
 
@@ -13,9 +15,9 @@ public_app = FastAPI(
 )
 
 business_logic = BusinessLogic(
-    path_to_accounts_yml_file=constants.PATH_TO_ACCOUNTS_YML_FILE,
-    path_to_developers_json_file=constants.PATH_TO_DEVELOPERS_JSON_FILE,
-    path_to_tasks_json_file=constants.PATH_TO_TASKS_JSON_FILE,
+    path_to_accounts_yml_file=str(constants.PATH_TO_ACCOUNTS_YML_FILE),
+    path_to_developers_json_file=str(constants.PATH_TO_DEVELOPERS_JSON_FILE),
+    path_to_tasks_json_file=str(constants.PATH_TO_TASKS_JSON_FILE),
 )
 
 
@@ -64,7 +66,7 @@ async def register(
 
 # ⚠️ this will serve everything
 @public_app.get("/{file_path}")
-async def serve_all_files_that_requested_by_html_files(file_path: str = None) -> FileResponse:
+async def serve_all_files_that_requested_by_html_files(file_path: Optional[str] = None) -> FileResponse:
     resolved_file_path = "index.html" if not file_path else file_path
     return FileResponse(constants.PATH_TO_HTML_FILES / resolved_file_path)
 

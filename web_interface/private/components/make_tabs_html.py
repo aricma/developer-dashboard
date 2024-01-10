@@ -48,7 +48,7 @@ def make_tab_html(
         props={
             "panel_id": panel_id,
             "active_class": "active" if initially_selected else None,
-            "is_selected": initially_selected,
+            "is_selected": "true" if initially_selected else "false",
             "title": title,
         }
     )

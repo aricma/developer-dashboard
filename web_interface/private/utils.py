@@ -11,7 +11,13 @@ from web_interface.private.types import SkipMissingDict, KeepMissingDict
 
 def print_html(html: str) -> None:
     print(BeautifulSoup(html, 'html.parser').prettify(
-        formatter=HTMLFormatter(indent=4)
+        formatter=HTMLFormatter(indent=4)  # type: ignore
+        # I looked up the issue on stack overflow and found out that
+        # I have to use 4.11 to use the HTMLFormatter with the indent option
+        # I am already using version 4.12 for bs4 and also the types ...
+        # I decided to type ignore since this does not raise any errors
+        # only mypy is complaining
+        # here the stack overflow link https://stackoverflow.com/a/72746676
     ))
 
 
@@ -25,10 +31,10 @@ def make_uuid():
 Props = Dict[str, HTMLElement]
 
 
-def make_html_template(template_name: str, props: Props = None) -> str:
+def make_html_template(template_name: str, props: Optional[Props] = None) -> str:
     return make_html_element_from_file(
         path=PATH_TO_HTML_TEMPLATES / resolve_template_name(template_name),
-        props=props if props is not None else {}
+        props={} if props is None else props
     )
 
 
@@ -84,15 +90,22 @@ def resolve_html_element(html_element: HTMLElement) -> Optional[str]:
     if isinstance(html_element, str):
         return html_element
     if isinstance(html_element, list):
-        return os.linesep.join([
-            resolve_html_element(each)
-            for each in html_element
-            if each is not None
-        ])
+        resolved_elements = []
+        for each in html_element:
+            if each is None:
+                continue
+            resolved_element = resolve_html_element(each)
+            if resolved_element is None:
+                continue
+            resolved_elements.append(resolved_element)
+
+        return os.linesep.join(resolved_elements)
     return None
 
 
 def join_html(html_items: List[str]) -> Optional[str]:
+    if len(html_items) == 0:
+        return None
     return os.linesep.join(html_items)
 
 

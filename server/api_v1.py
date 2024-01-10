@@ -28,16 +28,16 @@ async def server_error_exception_handler(_, exc: HTTPException):
         return JSONResponse(
             status_code=500,
             content={
-                "message": f"ServerError: "
-                           f"Exception with name \"{exc.__name__}\" got raised but not handled.",
+                "message": "ServerError: "
+                           f"Exception with name \"{exc.__class__.__name__}\" got raised but not handled.",
             }
         )
 
 
 business_logic = BusinessLogic(
-    path_to_accounts_yml_file=constants.PATH_TO_ACCOUNTS_YML_FILE,
-    path_to_developers_json_file=constants.PATH_TO_DEVELOPERS_JSON_FILE,
-    path_to_tasks_json_file=constants.PATH_TO_TASKS_JSON_FILE,
+    path_to_accounts_yml_file=str(constants.PATH_TO_ACCOUNTS_YML_FILE),
+    path_to_developers_json_file=str(constants.PATH_TO_DEVELOPERS_JSON_FILE),
+    path_to_tasks_json_file=str(constants.PATH_TO_TASKS_JSON_FILE),
 )
 
 

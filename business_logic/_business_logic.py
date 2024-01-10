@@ -85,7 +85,7 @@ class BusinessLogic:
         return file_name
 
     def _static_file_does_exist(self, file_name: str) -> bool:
-        return self._file_does_exist(PATH_TO_STATIC_FILES / file_name)
+        return self._file_does_exist(str(PATH_TO_STATIC_FILES / file_name))
 
     @staticmethod
     def _file_does_exist(path: str) -> bool:
@@ -197,9 +197,9 @@ class BusinessLogic:
         raise DummyDataNotFoundError()
 
     def get_task_burn_down_data_for_account(self, account: Account) -> dict:
-        ...
+        return dict()
 
-    def get_account_for_jwt(self, authentication_token: str) -> Account:
+    def get_account_for_jwt(self, authentication_token: str) -> Optional[Account]:
         account_info = AccountInfo(
             **jwt.decode(
                 jwt=authentication_token,

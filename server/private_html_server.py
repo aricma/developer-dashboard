@@ -1,4 +1,5 @@
 from http.client import HTTPException
+from typing import Optional
 
 from fastapi import FastAPI
 from starlette.requests import Request
@@ -34,16 +35,16 @@ async def server_error_exception_handler(_, exc: HTTPException):
 
 
 business_logic = BusinessLogic(
-    path_to_accounts_yml_file=constants.PATH_TO_ACCOUNTS_YML_FILE,
-    path_to_developers_json_file=constants.PATH_TO_DEVELOPERS_JSON_FILE,
-    path_to_tasks_json_file=constants.PATH_TO_TASKS_JSON_FILE,
+    path_to_accounts_yml_file=str(constants.PATH_TO_ACCOUNTS_YML_FILE),
+    path_to_developers_json_file=str(constants.PATH_TO_DEVELOPERS_JSON_FILE),
+    path_to_tasks_json_file=str(constants.PATH_TO_TASKS_JSON_FILE),
 )
 
 
 @private_app.middleware("http")
 async def check_for_authentication_cookie(request: Request, call_next):
     optional_authentication_token = request.cookies.get(constants.AUTHENTICATION_TOKEN_COOKIE_NAME)
-    if authentication_token_is_valid(token=optional_authentication_token):
+    if optional_authentication_token is not None and authentication_token_is_valid(token=optional_authentication_token):
         response = await call_next(request)
         return refresh_authentication_token_cookie_value(
             response=response,
@@ -105,12 +106,12 @@ async def get_dashboard_burn_down_page(request: Request):
 
 
 @private_app.get("/{file_path}")
-async def serve_all_files_that_requested_by_html_files(file_path: str = None):
+async def serve_all_files_that_requested_by_html_files(file_path: Optional[str] = None):
     resolved_file_path = "index.html" if not file_path else file_path
     return FileResponse(constants.PATH_TO_HTML_FILES / resolved_file_path)
 
 
-def authentication_token_is_valid(token: str = None) -> bool:
+def authentication_token_is_valid(token: Optional[str] = None) -> bool:
     return token is not None  # ⚠️ TODO: not implemented
 
 
@@ -134,8 +135,16 @@ class MissingAuthenticationTokenCookie(HTTPException):
         super().__init__("Missing Authentication Cookie")
 
 
+class MissingAccountForAuthenticationToken(HTTPException):
+
+    def __init__(self):
+        super().__init__("Missing account for given authentication token")
+
+
 def refresh_authentication_token_cookie_value(response: Response, old_authentication_token: str) -> Response:
-    account = business_logic.get_account_for_jwt(old_authentication_token)
+    account: Optional[Account] = business_logic.get_account_for_jwt(old_authentication_token)
+    if not account:
+        raise MissingAccountForAuthenticationToken()
     authentication_token = business_logic.unsafe_create_authentication_token(account)
     response.headers["Set-Cookie"] = create_authentication_token_cookie_value(authentication_token)
     return response
@@ -144,7 +153,10 @@ def refresh_authentication_token_cookie_value(response: Response, old_authentica
 def unsafe_get_account_from_authentication_token_cookie(request: Request) -> Account:
     optional_authentication_token = request.cookies.get(constants.AUTHENTICATION_TOKEN_COOKIE_NAME)
     if optional_authentication_token:
-        return business_logic.get_account_for_jwt(optional_authentication_token)
+        account = business_logic.get_account_for_jwt(optional_authentication_token)
+        if account:
+            return account
+        raise MissingAccountForAuthenticationToken()
     raise MissingAuthenticationTokenCookie()
 
 
