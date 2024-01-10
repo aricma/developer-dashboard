@@ -14,25 +14,25 @@ build: reset statics $(tasks_dummy_data_file_path)
 # ------------------------------------------------------------------------------
 
 refactor:
-	ruff --fix
+	poetry run ruff --fix
 
 lint:
-	ruff --check
-	mypy business_logic
-	mypy web_interface
-	mypy server
+	poetry run ruff check
+	poetry run mypy business_logic
+	poetry run mypy web_interface
+	poetry run mypy server
 
 tests:
-	pytest business_logic --noconftest
+	poetry run pytest business_logic --noconftest
 
 .PHONY: server
 server:
 	STATIC_FOLDER_NAME=$(static_folder_name) \
 	VELOCITY_DUMMY_DATA_FILE_PATH=$(tasks_dummy_data_file_path) \
-	uvicorn server.__main__:app --reload
+	poetry run uvicorn server.__main__:app --reload
 
 $(tasks_dummy_data_file_path):
-	python dummy_data/make_random_tasks.py > $(tasks_dummy_data_file_path)
+	poetry run python dummy_data/make_random_tasks.py > $(tasks_dummy_data_file_path)
 
 # --- make static web interface html, css and js files -------------------------
 
