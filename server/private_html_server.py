@@ -8,10 +8,10 @@ from business_logic._business_logic import BusinessLogic
 from business_logic.marshalls import Account
 from server import constants
 from server.authentication_utils import create_authentication_token_cookie_value
-from web_interface.private.pages.make_dashboard_burn_down_page import make_dashboard_burn_down_page
-from web_interface.private.pages.make_dashboard_overview_page import make_dashboard_overview_page
-from web_interface.private.pages.make_dashboard_velocity_page import make_dashboard_velocity_page
-from web_interface.private.pages.make_error_page import make_error_page
+from web_interface.pages.make_dashboard_burn_down_page import make_dashboard_burn_down_page
+from web_interface.pages.make_dashboard_overview_page import make_dashboard_overview_page
+from web_interface.pages.make_dashboard_velocity_page import make_dashboard_velocity_page
+from web_interface.pages.make_error_page import make_error_page
 
 private_app = FastAPI(
     title="Developer Dashboard Web Server(Private)",

@@ -5,8 +5,8 @@ from business_logic._business_logic import BusinessLogic
 from server import constants
 from server.authentication_utils import create_authentication_token_cookie_value, \
     create_expired_authentication_token_cookie_value
-from web_interface.private.pages.make_register_page import make_register_page
-from web_interface.private.pages.make_sign_in_page import make_sign_in_page
+from web_interface.pages.make_register_page import make_register_page
+from web_interface.pages.make_sign_in_page import make_sign_in_page
 
 public_app = FastAPI(
     title="Developer Dashboard Web Server(Public)",
