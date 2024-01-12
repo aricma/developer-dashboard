@@ -1,6 +1,6 @@
 from typing import Dict
 
-from business_logic.models.types import StoryPoints
-from domain_models.task import Date
+Date = str
+StoryPoints = float
 
 DeveloperVelocity = Dict[Date, StoryPoints]

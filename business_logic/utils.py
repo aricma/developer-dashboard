@@ -4,7 +4,6 @@ from datetime import date
 from pathlib import Path
 from typing import Generic, TypeVar, Callable, Union
 
-from business_logic.models import Date
 from yaml import load, Loader
 
 
@@ -63,7 +62,7 @@ Update = Callable[[str], str]
 
 class FileUpdater(UpdaterInterface):
     def __init__(
-        self, reader: ReaderInterface, writer: WriterInterface, update: Update
+            self, reader: ReaderInterface, writer: WriterInterface, update: Update
     ):
         self._reader = reader
         self._writer = writer
@@ -73,6 +72,9 @@ class FileUpdater(UpdaterInterface):
         file_content = self._reader.unsafe_read()
         updated_file_content = self._update(file_content)
         self._writer.unsafe_write(updated_file_content)
+
+
+Date = str
 
 
 def make_date(year: int, month: int, day: int) -> Date:

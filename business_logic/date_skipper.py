@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from dateutil.parser import parse as to_date
 
-from business_logic.models import Date
+Date = str
 
 
 class DateSkipper(ABC):
