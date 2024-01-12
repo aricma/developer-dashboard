@@ -1,3 +1,4 @@
+import dataclasses
 from http.client import HTTPException
 from typing import Optional
 
@@ -5,17 +6,24 @@ from fastapi import FastAPI
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, FileResponse
 
-from business_logic.marshalls import Account
+from business_logic.authentication_business_logic import AuthenticationBusinessLogic
+from business_logic.burn_down_business_logic import BurnDownBusinessLogic
+from business_logic.chart_data_formatter import ChartDataFormatter
 from business_logic.developer_velocity_business_logic import (
     DeveloperVelocityBusinessLogic,
 )
+from business_logic.serializer.misc import Account
 from server import constants
-from server.authentication_utils import create_authentication_token_cookie_value
 from server.authentication_utils import (
     create_authentication_token_cookie_value,
     authentication_token_is_valid,
     redirect_to_login_page,
 )
+from server.errors import (
+    MissingAuthenticationTokenCookie,
+    MissingAccountForAuthenticationToken,
+)
+from server.utils import limit_string
 from web_interface.pages.make_dashboard_burn_down_page import (
     make_dashboard_burn_down_page,
 )
@@ -42,33 +50,54 @@ async def server_error_exception_handler(_, exc: HTTPException):
         return HTMLResponse(
             content=make_error_page(
                 error_code="500",
-                message=f"There was an unknown error raised by the server: \"{error_message}\". "
-                        "Please create a ticket at https://github.com/aricma/developer-dashboard."
+                message=f'There was an unknown error raised by the server: "{error_message}". '
+                        "Please create a ticket at https://github.com/aricma/developer-dashboard.",
             )
         )
 
 
 developer_velocity_business_logic = DeveloperVelocityBusinessLogic(
     path_to_tasks_json_file=str(envorinment.TASK_DUMMY_DATA_FILE_PATH)
+)
+
+burn_down_business_logic = BurnDownBusinessLogic(
+    path_to_tasks_json_file=str(envorinment.TASK_DUMMY_DATA_FILE_PATH)
+)
+
+chart_formatter = ChartDataFormatter()
+
+authentication_business_logic = AuthenticationBusinessLogic(
     path_to_accounts_yml_file=str(constants.PATH_TO_ACCOUNTS_YML_FILE),
 )
 
 
 @private_app.middleware("http")
 async def check_for_authentication_cookie(request: Request, call_next):
-    optional_authentication_token = request.cookies.get(constants.AUTHENTICATION_TOKEN_COOKIE_NAME)
-    if optional_authentication_token is not None and authentication_token_is_valid(token=optional_authentication_token):
+    optional_authentication_token = request.cookies.get(
+        constants.AUTHENTICATION_TOKEN_COOKIE_NAME
+    )
+    if optional_authentication_token is not None and authentication_token_is_valid(
+            token=optional_authentication_token
+    ):
         response = await call_next(request)
-        return refresh_authentication_token_cookie_value(
-            response=response,
-            old_authentication_token=optional_authentication_token
-        )
+        try:
+            new_authentication_token = (
+                authentication_business_logic.unsafe_refresh_authentication_token(
+                    old_authentication_token=optional_authentication_token
+                )
+            )
+            response.headers["Set-Cookie"] = create_authentication_token_cookie_value(
+                new_authentication_token
+            )
+            return response
+        except Exception:
+            raise MissingAccountForAuthenticationToken()
     return redirect_to_login_page()
 
 
 @private_app.get("/dashboard/overview")
 async def get_dashboard_overview_page(request: Request):
-    account = unsafe_get_account_from_authentication_token_cookie(request)
+    account = _unsafe_get_account_from_authentication_token_cookie(request)
     return HTMLResponse(
         content=make_dashboard_overview_page(
             user_name=account.name,
@@ -113,13 +142,17 @@ async def get_dashboard_velocity_page(request: Request):
 
 @private_app.get("/dashboard/burn-down")
 async def get_dashboard_burn_down_page(request: Request):
-    account = unsafe_get_account_from_authentication_token_cookie(request)
-    # data = business_logic.get_task_burn_down_data_for_account(account=account)
-
+    account = _unsafe_get_account_from_authentication_token_cookie(request)
+    burn_down_forcast = burn_down_business_logic.get_task_burn_down_data_for_account()
+    chart_data = chart_formatter.to_burn_down_chart_data(burn_down_forcast)
+    file_name = developer_velocity_business_logic.get_file_path_for_data(
+        data=dataclasses.asdict(chart_data),
+        account_id=account.id,
+    )
     return HTMLResponse(
         content=make_dashboard_burn_down_page(
             user_name=account.name,
-            data_file_name="./foobar-task-burn-down-metric.json"
+            data_file_name=file_name
         )
     )
 
