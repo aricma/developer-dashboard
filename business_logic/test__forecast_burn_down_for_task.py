@@ -5,7 +5,7 @@ import pytest
 
 from business_logic.burn_down_forecaster import BurnDownForecaster
 from business_logic.models.burn_down_forecast import BurnDownForecast
-from business_logic.date_skipper import NoDateSkipper, WeekendSkipper
+from business_logic.interfaces.date_skipper import NoDateSkipper, WeekendSkipper
 from business_logic.models.burn_down_forecastable_task import BurnDownForecastableTask
 from business_logic.models.date import Date
 

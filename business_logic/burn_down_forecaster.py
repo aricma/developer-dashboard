@@ -1,4 +1,4 @@
-from business_logic.date_skipper import DateSkipper
+from business_logic.interfaces.date_skipper import DateSkipper
 from business_logic.models.burn_down_forecast import BurnDownForecast
 from business_logic.models.burn_down_forecastable_task import BurnDownForecastableTask
 

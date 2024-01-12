@@ -7,7 +7,7 @@ from business_logic.burn_down_forecastable_task_getter_proxy import (
     BurnDownForecastableTaskGetterProxy,
 )
 from business_logic.burn_down_forecaster import BurnDownForecaster
-from business_logic.date_skipper import (
+from business_logic.interfaces.date_skipper import (
     NoDateSkipper,
     # WeekendSkipper
 )
