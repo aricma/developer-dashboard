@@ -10,15 +10,17 @@ from web_interface.private.types import SkipMissingDict, KeepMissingDict
 
 
 def print_html(html: str) -> None:
-    print(BeautifulSoup(html, 'html.parser').prettify(
-        formatter=HTMLFormatter(indent=4)  # type: ignore
-        # I looked up the issue on stack overflow and found out that
-        # I have to use 4.11 to use the HTMLFormatter with the indent option
-        # I am already using version 4.12 for bs4 and also the types ...
-        # I decided to type ignore since this does not raise any errors
-        # only mypy is complaining
-        # here the stack overflow link https://stackoverflow.com/a/72746676
-    ))
+    print(
+        BeautifulSoup(html, "html.parser").prettify(
+            formatter=HTMLFormatter(indent=4)  # type: ignore
+            # I looked up the issue on stack overflow and found out that
+            # I have to use 4.11 to use the HTMLFormatter with the indent option
+            # I am already using version 4.12 for bs4 and also the types ...
+            # I decided to type ignore since this does not raise any errors
+            # only mypy is complaining
+            # here the stack overflow link https://stackoverflow.com/a/72746676
+        )
+    )
 
 
 HTMLElement = Union[List["HTMLElement"], str, None]
@@ -34,15 +36,12 @@ Props = Dict[str, HTMLElement]
 def make_html_template(template_name: str, props: Optional[Props] = None) -> str:
     return make_html_element_from_file(
         path=PATH_TO_HTML_TEMPLATES / resolve_template_name(template_name),
-        props={} if props is None else props
+        props={} if props is None else props,
     )
 
 
 def resolve_template_name(template_name: str) -> str:
-    return resolve_file_name(
-        file_name=template_name,
-        extension="html"
-    )
+    return resolve_file_name(file_name=template_name, extension="html")
 
 
 FileExtension = Union[
@@ -65,8 +64,7 @@ def make_html_element_from_file(path: Union[Path, str], props: Props) -> str:
         template = reader.read()
 
     return fill_template_with_given_props_and_ignore_missing(
-        template=template.strip(),
-        props=resolve_and_filter_props(props)
+        template=template.strip(), props=resolve_and_filter_props(props)
     )
 
 
@@ -78,7 +76,9 @@ def resolve_and_filter_props(props: Props) -> Props:
     }
 
 
-def fill_template_with_given_props_and_ignore_missing(template: str, props: Props) -> str:
+def fill_template_with_given_props_and_ignore_missing(
+    template: str, props: Props
+) -> str:
     return template.format_map(SkipMissingDict(**props))
 
 
@@ -114,10 +114,7 @@ def read_text_file(text_file_name: str) -> str:
 
 
 def resolve_text_file_name(text_file_name: str) -> str:
-    return resolve_file_name(
-        file_name=text_file_name,
-        extension="txt"
-    )
+    return resolve_file_name(file_name=text_file_name, extension="txt")
 
 
 def read_file(path: Union[Path, str]) -> str:

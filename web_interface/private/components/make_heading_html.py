@@ -23,17 +23,17 @@ heading_to_classes_map = {
     "h6": "",
 }
 
-alignment_to_classes_map: Dict[Alignment, str] = SkipMissingDict(**{
-    "start": "text-start",
-    "center": "text-center",
-    "end": "text-end",
-})
+alignment_to_classes_map: Dict[Alignment, str] = SkipMissingDict(
+    **{
+        "start": "text-start",
+        "center": "text-center",
+        "end": "text-end",
+    }
+)
 
 
 def make_heading_html(
-        title: str,
-        heading: Heading = "h2",
-        alignment: Alignment = "start"
+    title: str, heading: Heading = "h2", alignment: Alignment = "start"
 ) -> str:
     return make_html_template(
         template_name="heading",
@@ -41,10 +41,9 @@ def make_heading_html(
             "title": title,
             "heading_tag": heading,
             "classes": _make_classes(
-                heading_to_classes_map[heading],
-                alignment_to_classes_map[alignment]
-            )
-        }
+                heading_to_classes_map[heading], alignment_to_classes_map[alignment]
+            ),
+        },
     )
 
 

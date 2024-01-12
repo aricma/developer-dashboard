@@ -48,7 +48,7 @@ re_routing_map = {
 async def route_mapping(request: Request, call_next):
     requested_path = request.url.path
     if requested_path in re_routing_map.keys():
-        request.scope['path'] = re_routing_map[requested_path]
+        request.scope["path"] = re_routing_map[requested_path]
 
     return await call_next(request)
 

@@ -5,4 +5,4 @@ class SkipMissingDict(dict):
 
 class KeepMissingDict(dict):
     def __missing__(self, key):
-        return '{' + key + '}'
+        return "{" + key + "}"

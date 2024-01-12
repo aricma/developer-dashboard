@@ -29,14 +29,12 @@ T = TypeVar("T")
 
 
 class ReaderInterface(ABC):
-
     @abstractmethod
     def unsafe_read(self) -> str:
         ...
 
 
 class FileReader(ReaderInterface):
-
     def __init__(self, file_path: str):
         self._file_path = file_path
 
@@ -46,14 +44,12 @@ class FileReader(ReaderInterface):
 
 
 class WriterInterface(ABC):
-
     @abstractmethod
     def unsafe_write(self, value: str) -> None:
         ...
 
 
 class UpdaterInterface(ABC, Generic[T]):
-
     @abstractmethod
     def unsafe_update(self, record: T) -> None:
         ...
@@ -63,8 +59,9 @@ Update = Callable[[str], str]
 
 
 class FileUpdater(UpdaterInterface):
-
-    def __init__(self, reader: ReaderInterface, writer: WriterInterface, update: Update):
+    def __init__(
+        self, reader: ReaderInterface, writer: WriterInterface, update: Update
+    ):
         self._reader = reader
         self._writer = writer
         self._update = update

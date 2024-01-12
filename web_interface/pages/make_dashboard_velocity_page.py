@@ -1,18 +1,27 @@
 from web_interface.private.components.make_chart_html import make_chart_html
-from web_interface.private.components.make_tabs_html import make_tabs_content_html, make_tab_panel_html, make_tabs_html, \
-    make_tab_html
-from web_interface.private.features.make_dashboard_detail_header_html import make_dashboard_overview_detail_header_html
-from web_interface.private.features.make_dashboard_main_menu_item_html import make_dashboard_main_menu_item_html
-from web_interface.private.features.make_dashboard_velocity_detail_body_html import \
-    make_dashboard_velocity_detail_body_html
+from web_interface.private.components.make_tabs_html import (
+    make_tabs_content_html,
+    make_tab_panel_html,
+    make_tabs_html,
+    make_tab_html,
+)
+from web_interface.private.features.make_dashboard_detail_header_html import (
+    make_dashboard_overview_detail_header_html,
+)
+from web_interface.private.features.make_dashboard_main_menu_item_html import (
+    make_dashboard_main_menu_item_html,
+)
+from web_interface.private.features.make_dashboard_velocity_detail_body_html import (
+    make_dashboard_velocity_detail_body_html,
+)
 from web_interface.private.utils import make_html_template, read_text_file
 
 
 def make_dashboard_velocity_page(
-        user_name: str,
-        last_two_weeks_velocity_chart_data_file_name: str,
-        last_four_weeks_velocity_chart_data_file_name: str,
-        last_eight_weeks_velocity_chart_data_file_name: str,
+    user_name: str,
+    last_two_weeks_velocity_chart_data_file_name: str,
+    last_four_weeks_velocity_chart_data_file_name: str,
+    last_eight_weeks_velocity_chart_data_file_name: str,
 ) -> str:
     return make_html_template(
         template_name="dashboard",
@@ -37,9 +46,7 @@ def make_dashboard_velocity_page(
                 ),
             ],
             "detail_children": [
-                make_dashboard_overview_detail_header_html(
-                    title="Developer Velocity"
-                ),
+                make_dashboard_overview_detail_header_html(title="Developer Velocity"),
                 make_tabs_html(
                     children=[
                         make_tab_html(
@@ -54,7 +61,7 @@ def make_dashboard_velocity_page(
                         make_tab_html(
                             panel_id="last-eight-weeks",
                             title="Last 8 Weeks",
-                        )
+                        ),
                     ]
                 ),
                 make_tabs_content_html(
@@ -85,13 +92,13 @@ def make_dashboard_velocity_page(
                                     data_file_name=last_eight_weeks_velocity_chart_data_file_name,
                                     chart_type="velocity",
                                 ),
-                            ]
-                        )
+                            ],
+                        ),
                     ]
                 ),
                 make_dashboard_velocity_detail_body_html(
                     description=read_text_file("velocity-detail-description"),
-                )
-            ]
-        }
+                ),
+            ],
+        },
     )
