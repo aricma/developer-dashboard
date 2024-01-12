@@ -5,8 +5,10 @@ from starlette.responses import HTMLResponse, FileResponse, RedirectResponse
 
 from business_logic.authentication_business_logic import AuthenticationBusinessLogic
 from server import constants
-from server.authentication_utils import create_authentication_token_cookie_value, \
-    create_expired_authentication_token_cookie_value
+from server.authentication_utils import (
+    create_expired_authentication_token_cookie_value,
+    redirect_after_successful_sign_in,
+)
 from web_interface.pages.make_register_page import make_register_page
 from web_interface.pages.make_sign_in_page import make_sign_in_page
 
@@ -67,13 +69,3 @@ async def serve_all_files_that_requested_by_html_files(
 ) -> FileResponse:
     resolved_file_path = "index.html" if not file_path else file_path
     return FileResponse(constants.PATH_TO_HTML_FILES / resolved_file_path)
-
-
-def redirect_after_successful_sign_in(authentication_token: str) -> RedirectResponse:
-    return RedirectResponse(
-        status_code=303,
-        url="/",
-        headers={
-            "Set-Cookie": create_authentication_token_cookie_value(authentication_token)
-        },
-    )

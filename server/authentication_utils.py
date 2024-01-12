@@ -1,3 +1,5 @@
+from starlette.responses import RedirectResponse
+
 from server import constants
 
 
@@ -15,4 +17,14 @@ def create_expired_authentication_token_cookie_value() -> str:
     return (
         f"{constants.AUTHENTICATION_TOKEN_COOKIE_NAME}=;"
         f"Max-Age=-1;"
+
+
+def redirect_after_successful_sign_in(authentication_token: str) -> RedirectResponse:
+    return RedirectResponse(
+        status_code=303,
+        url="/",
+        headers={
+            "Set-Cookie": create_authentication_token_cookie_value(authentication_token)
+        },
+    )
     )
