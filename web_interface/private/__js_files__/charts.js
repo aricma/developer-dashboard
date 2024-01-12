@@ -27,8 +27,8 @@
         switch (chartType) {
             case 'velocity':
                 return makeVelocityChart(element, {
-                    average_developer_velocity: data['data_points']["average_developer_velocity"],
-                    developer_velocity: data['data_points']["developer_velocity"]
+                    average_developer_velocity: data['data_points']['average_developer_velocity'],
+                    developer_velocity: data['data_points']['developer_velocity'],
                 })
             case 'burn-down':
                 return makeBurnDownChart(element, data['data_points'])
@@ -162,6 +162,10 @@
                         },
                     },
                     x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'YYYY-MM-DD',
+                        },
                         grid: {
                             color: 'rgb(100,100,100)',
                         },
