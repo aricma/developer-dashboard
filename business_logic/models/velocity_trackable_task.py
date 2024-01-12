@@ -1,10 +1,11 @@
 import dataclasses
 from typing import List
 
+from business_logic.models.date import Date
+
 TaskID = str
 StoryPoints = float
 DeveloperID = str
-Date = str
 
 
 @dataclasses.dataclass

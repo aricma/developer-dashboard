@@ -1,8 +1,6 @@
-from datetime import timedelta as duration
-
-from dateutil.parser import parse as to_date
 from typing import List
 
+from business_logic.models.date import Date
 from business_logic.models.developer_velocity import DeveloperVelocity
 from business_logic.models.velocity_trackable_task import VelocityTrackableTask
 
@@ -69,27 +67,29 @@ class DeveloperVelocityTracker:
         self, a: DeveloperVelocity, b: DeveloperVelocity
     ) -> DeveloperVelocity:
         for date, story_points in b.items():
-            self._add_day_to_velocity(velocity=a, date=date, story_points=story_points)
+            self._add_day_to_velocity(
+                velocity=a, date=Date.from_string(date), story_points=story_points
+            )
         return a
 
     @staticmethod
     def filter_velocity_for_given_start_date(
-        velocity: DeveloperVelocity, start_date: str
+        velocity: DeveloperVelocity, start_date: Date
     ) -> DeveloperVelocity:
         return {
             date: story_points
             for date, story_points in velocity.items()
-            if to_date(date) >= to_date(start_date)
+            if Date.from_string(date) >= start_date
         }
 
     @staticmethod
     def _add_day_to_velocity(
-        velocity: DeveloperVelocity, date: str, story_points: float
+        velocity: DeveloperVelocity, date: Date, story_points: float
     ) -> DeveloperVelocity:
-        if date in velocity.keys():
-            velocity[date] += story_points
+        if date.to_string() in velocity.keys():
+            velocity[date.to_string()] += story_points
         else:
-            velocity[date] = story_points
+            velocity[date.to_string()] = story_points
         return velocity
 
     @staticmethod
@@ -100,11 +100,11 @@ class DeveloperVelocityTracker:
 
     @staticmethod
     def _distribute_story_points_among_days_between_start_and_end_date(
-        start_date: str, end_date: str, story_points: float
+        start_date: Date, end_date: Date, story_points: float
     ) -> DeveloperVelocity:
-        days_between_start_and_end_date = (to_date(end_date) - to_date(start_date)).days
+        days_between_start_and_end_date = end_date.get_days_until(start_date)
         if days_between_start_and_end_date == 0:
-            return {start_date: story_points}
+            return {start_date.to_string(): story_points}
         # add one day, if 1 day is between 2 days we have to divide the story points by 2
         adjusted_days_between_the_dates_to_divide_by = (
             days_between_start_and_end_date + 1
@@ -114,13 +114,16 @@ class DeveloperVelocityTracker:
         )
         if days_between_start_and_end_date == 1:
             return {
-                start_date: story_points_per_day,
-                end_date: story_points_per_day,
+                start_date.to_string(): story_points_per_day,
+                end_date.to_string(): story_points_per_day,
             }
         if days_between_start_and_end_date > 1:
             developer_velocity: DeveloperVelocity = {}
             for days in range(0, days_between_start_and_end_date + 1):
-                date = str((to_date(start_date) + duration(days=days)).date())
-                developer_velocity = {**developer_velocity, date: story_points_per_day}
+                date = start_date.add_days(days)
+                developer_velocity = {
+                    **developer_velocity,
+                    date.to_string(): story_points_per_day,
+                }
             return developer_velocity
         return {}

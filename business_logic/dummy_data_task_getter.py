@@ -4,6 +4,7 @@ from typing import List
 
 from business_logic.errors import DummyDataNotFoundError
 from business_logic.interfaces.task_getter import TaskGetter
+from business_logic.models.date import Date
 from business_logic.models.task import Task
 from business_logic.serializer.dummy_data_file_de_serializer import (
     DeserializedDummyTasksFile,
@@ -33,8 +34,12 @@ class DummyDataTaskGetter(TaskGetter[Task]):
             story_points=deserialized_task.story_points,
             assignees=deserialized_task.assignees,
             sub_tasks=self._to_tasks(deserialized_task.sub_tasks),
-            date_started=deserialized_task.date_started,
-            date_finished=deserialized_task.date_finished,
+            date_started=Date.from_string(deserialized_task.date_started),
+            date_finished=(
+                Date.from_string(deserialized_task.date_finished)
+                if deserialized_task.date_finished is not None
+                else None
+            ),
         )
 
     def _read_dummy_data(self) -> DeserializedDummyTasksFile:

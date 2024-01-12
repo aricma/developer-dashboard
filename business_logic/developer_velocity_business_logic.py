@@ -1,16 +1,14 @@
 import dataclasses
-import datetime
 import json
 from pathlib import Path
 from typing import Union, List
-
-from dateutil.parser import parse as to_date
 
 from business_logic.chart_data_formatter import (
     ChartDataFormatter,
     VelocityChartDataFile,
 )
 from business_logic.developer_velocity_tracker import DeveloperVelocityTracker
+from business_logic.models.date import Date
 from business_logic.models.developer_velocity import DeveloperVelocity
 from business_logic.dummy_data_task_getter import DummyDataTaskGetter
 from business_logic.models.velocity_trackable_task import VelocityTrackableTask
@@ -52,23 +50,17 @@ class DeveloperVelocityBusinessLogic:
         return file_name
 
     def get_average_developer_velocity(self) -> DeveloperVelocity:
-        tracking_start_date = str(
-            datetime.date.today() - datetime.timedelta(weeks=8)
-        )
+        tracking_start_date = Date.today().go_back_weeks(weeks=8)
         tasks = self._filter_tasks_before_given_start_date(
             tasks=self._task_getter.get_tasks(),
             start_date=tracking_start_date,
         )
-        return (
-            self._velocity_tracker.track_average_developer_velocity(tasks=tasks)
-        )
+        return self._velocity_tracker.track_average_developer_velocity(tasks=tasks)
 
     def _get_velocity_data_for_developer(
-            self, account: Account, time_in_weeks: int
+        self, account: Account, time_in_weeks: int
     ) -> VelocityChartDataFile:
-        tracking_start_date = str(
-            datetime.date.today() - datetime.timedelta(weeks=time_in_weeks)
-        )
+        tracking_start_date = Date.today().go_back_weeks(weeks=time_in_weeks)
         tasks = self._filter_tasks_before_given_start_date(
             tasks=self._task_getter.get_tasks(),
             start_date=tracking_start_date,
@@ -93,20 +85,18 @@ class DeveloperVelocityBusinessLogic:
 
     @staticmethod
     def _filter_tasks_before_given_start_date(
-            tasks: List[VelocityTrackableTask], start_date: str
+        tasks: List[VelocityTrackableTask], start_date: Date
     ) -> List[VelocityTrackableTask]:
-        return [
-            task for task in tasks if to_date(task.date_finished) >= to_date(start_date)
-        ]
+        return [task for task in tasks if task.date_finished >= start_date]
 
     @staticmethod
     def _filter_velocity_before_given_start_date(
-            velocity: DeveloperVelocity, start_date: str
+        velocity: DeveloperVelocity, start_date: Date
     ) -> DeveloperVelocity:
         return {
             date: story_points
             for date, story_points in velocity.items()
-            if to_date(date) >= to_date(start_date)
+            if Date.from_string(date) >= start_date
         }
 
     @staticmethod

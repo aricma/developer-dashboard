@@ -1,6 +1,5 @@
 import hashlib
 from abc import ABC, abstractmethod
-from datetime import date
 from pathlib import Path
 from typing import Generic, TypeVar, Callable, Union
 
@@ -72,13 +71,6 @@ class FileUpdater(UpdaterInterface):
         file_content = self._reader.unsafe_read()
         updated_file_content = self._update(file_content)
         self._writer.unsafe_write(updated_file_content)
-
-
-Date = str
-
-
-def make_date(year: int, month: int, day: int) -> Date:
-    return str(date(year, month, day))
 
 
 def hash_string_value(value: str) -> str:

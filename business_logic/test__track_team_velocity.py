@@ -1,12 +1,12 @@
 import dataclasses
 from typing import List
-from datetime import datetime as date
 
 import pytest
 
 from business_logic.developer_velocity_tracker import DeveloperVelocityTracker
+from business_logic.models.date import Date
 from business_logic.models.developer_velocity import DeveloperVelocity
-from domain_models.task import FinishedTask
+from business_logic.models.velocity_trackable_task import VelocityTrackableTask
 from business_logic.test__track_developer_velocity import (
     DeveloperVelocityTrackerTestCase,
 )
@@ -15,7 +15,7 @@ from business_logic.test__track_developer_velocity import (
 @dataclasses.dataclass
 class TeamVelocityTrackerTestCase:
     message: str
-    given: List[FinishedTask]
+    given: List[VelocityTrackableTask]
     expected: DeveloperVelocity
 
 
@@ -28,115 +28,115 @@ test_cases: List[TeamVelocityTrackerTestCase] = [
     TeamVelocityTrackerTestCase(
         message="Given one task finished on the same day, when call then returns the velocity for that day",
         given=[
-            FinishedTask(
+            VelocityTrackableTask(
                 id="1",
-                date_started=str(date(2020, 5, 17)),
-                date_finished=str(date(2020, 5, 17)),
+                date_started=Date(2020, 5, 17),
+                date_finished=Date(2020, 5, 17),
                 story_points=6,
                 assignees=["Dave"],
             )
         ],
-        expected={str(date(2020, 5, 17)): 6},
+        expected={Date(2020, 5, 17).to_string(): 6},
     ),
     TeamVelocityTrackerTestCase(
         message="Given one task finished on the next day, "
         "when call then returns half the story points as the velocity for both days",
         given=[
-            FinishedTask(
+            VelocityTrackableTask(
                 id="1",
-                date_started=str(date(2020, 5, 17)),
-                date_finished=str(date(2020, 5, 18)),
+                date_started=Date(2020, 5, 17),
+                date_finished=Date(2020, 5, 18),
                 story_points=6,
                 assignees=["Dave"],
             )
         ],
-        expected={str(date(2020, 5, 17)): 3, str(date(2020, 5, 18)): 3},
+        expected={Date(2020, 5, 17).to_string(): 3, Date(2020, 5, 18).to_string(): 3},
     ),
     TeamVelocityTrackerTestCase(
         message="Given one task finished in three days, "
         "when call then returns one third of the story points as the velocity for each day",
         given=[
-            FinishedTask(
+            VelocityTrackableTask(
                 id="1",
-                date_started=str(date(2020, 5, 17)),
-                date_finished=str(date(2020, 5, 19)),
+                date_started=Date(2020, 5, 17),
+                date_finished=Date(2020, 5, 19),
                 story_points=6,
                 assignees=["Dave"],
             )
         ],
         expected={
-            str(date(2020, 5, 17)): 2,
-            str(date(2020, 5, 18)): 2,
-            str(date(2020, 5, 19)): 2,
+            Date(2020, 5, 17).to_string(): 2,
+            Date(2020, 5, 18).to_string(): 2,
+            Date(2020, 5, 19).to_string(): 2,
         },
     ),
     TeamVelocityTrackerTestCase(
         message="Given multiple tasks finished on different days with no overlap, "
         "when called then returns the expected velocity for each day",
         given=[
-            FinishedTask(
+            VelocityTrackableTask(
                 id="1",
-                date_started=str(date(2020, 5, 17)),
-                date_finished=str(date(2020, 5, 19)),
+                date_started=Date(2020, 5, 17),
+                date_finished=Date(2020, 5, 19),
                 story_points=6,
                 assignees=["Dave"],
             ),
-            FinishedTask(
+            VelocityTrackableTask(
                 id="2",
-                date_started=str(date(2020, 5, 20)),
-                date_finished=str(date(2020, 5, 21)),
+                date_started=Date(2020, 5, 20),
+                date_finished=Date(2020, 5, 21),
                 story_points=4,
                 assignees=["Steve"],
             ),
         ],
         expected={
-            str(date(2020, 5, 17)): 2,
-            str(date(2020, 5, 18)): 2,
-            str(date(2020, 5, 19)): 2,
-            str(date(2020, 5, 20)): 2,
-            str(date(2020, 5, 21)): 2,
+            Date(2020, 5, 17).to_string(): 2,
+            Date(2020, 5, 18).to_string(): 2,
+            Date(2020, 5, 19).to_string(): 2,
+            Date(2020, 5, 20).to_string(): 2,
+            Date(2020, 5, 21).to_string(): 2,
         },
     ),
     TeamVelocityTrackerTestCase(
         message="Given multiple tasks finished on different days with overlap, "
         "when called then returns the expected velocity for each day with the overlap aggregated",
         given=[
-            FinishedTask(
+            VelocityTrackableTask(
                 id="1",
-                date_started=str(date(2020, 5, 17)),
-                date_finished=str(date(2020, 5, 19)),
+                date_started=Date(2020, 5, 17),
+                date_finished=Date(2020, 5, 19),
                 story_points=6,
                 assignees=["Dave"],
             ),
-            FinishedTask(
+            VelocityTrackableTask(
                 id="2",
-                date_started=str(date(2020, 5, 19)),
-                date_finished=str(date(2020, 5, 21)),
+                date_started=Date(2020, 5, 19),
+                date_finished=Date(2020, 5, 21),
                 story_points=6,
                 assignees=["Steve"],
             ),
-            FinishedTask(
+            VelocityTrackableTask(
                 id="3",
-                date_started=str(date(2020, 5, 16)),
-                date_finished=str(date(2020, 5, 17)),
+                date_started=Date(2020, 5, 16),
+                date_finished=Date(2020, 5, 17),
                 story_points=6,
                 assignees=["Paul", "Steve"],
             ),
-            FinishedTask(
+            VelocityTrackableTask(
                 id="3",
-                date_started=str(date(2020, 5, 17)),
-                date_finished=str(date(2020, 5, 20)),
+                date_started=Date(2020, 5, 17),
+                date_finished=Date(2020, 5, 20),
                 story_points=4,
                 assignees=["Sarah", "Dave"],
             ),
         ],
         expected={
-            str(date(2020, 5, 16)): 3,
-            str(date(2020, 5, 17)): 6,
-            str(date(2020, 5, 18)): 3,
-            str(date(2020, 5, 19)): 5,
-            str(date(2020, 5, 20)): 3,
-            str(date(2020, 5, 21)): 2,
+            Date(2020, 5, 16).to_string(): 3,
+            Date(2020, 5, 17).to_string(): 6,
+            Date(2020, 5, 18).to_string(): 3,
+            Date(2020, 5, 19).to_string(): 5,
+            Date(2020, 5, 20).to_string(): 3,
+            Date(2020, 5, 21).to_string(): 2,
         },
     ),
 ]
