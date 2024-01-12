@@ -3,6 +3,7 @@ from typing import List
 
 from business_logic.models.burn_down_forecast import BurnDownForecast
 from business_logic.models.developer_velocity import DeveloperVelocity
+from business_logic.models.story_points import EstimatedStoryPoints
 
 Date = str
 StoryPoints = float
@@ -47,9 +48,9 @@ class BurnDownChartDataFile:
 
 class ChartDataFormatter:
     def to_single_developer_velocity_chart_data(
-        self,
-        developer_velocity: DeveloperVelocity,
-        average_developer_velocity: DeveloperVelocity,
+            self,
+            developer_velocity: DeveloperVelocity,
+            average_developer_velocity: DeveloperVelocity,
     ) -> VelocityChartDataFile:
         return VelocityChartDataFile(
             data_points=VelocityChartData(
@@ -68,15 +69,15 @@ class ChartDataFormatter:
 
     @staticmethod
     def to_burn_down_chart_data(
-        burn_down_forecast: BurnDownForecast,
+            burn_down_forecast: BurnDownForecast,
     ) -> BurnDownChartDataFile:
         return BurnDownChartDataFile(
             data_points=[
                 BurnDownChartDataPoint(
                     x=date,
-                    y=story_points,
+                    y=story_points.value,
                     meta=BurnDownChartDataPointMetaData(
-                        estimated=True,
+                        estimated=isinstance(story_points, EstimatedStoryPoints),
                     ),
                 )
                 for date, story_points in burn_down_forecast.items()
@@ -85,7 +86,7 @@ class ChartDataFormatter:
 
     @staticmethod
     def velocity_to_chart_data_points(
-        velocity: DeveloperVelocity,
+            velocity: DeveloperVelocity,
     ) -> VelocityChartDataPoints:
         return [
             VelocityChartDataPoint(
@@ -97,6 +98,6 @@ class ChartDataFormatter:
 
     @staticmethod
     def sort_data_points_by_date(
-        data_points: VelocityChartDataPoints,
+            data_points: VelocityChartDataPoints,
     ) -> VelocityChartDataPoints:
         return sorted(data_points, key=lambda data_point: data_point.x)
