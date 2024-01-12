@@ -4,7 +4,8 @@ from typing import List
 
 import pytest
 
-from business_logic.developer_velocity_tracker import Velocity, DeveloperVelocityTracker
+from business_logic.developer_velocity_tracker import DeveloperVelocityTracker
+from business_logic.models.developer_velocity import DeveloperVelocity
 from domain_models.task import FinishedTask
 
 
@@ -13,7 +14,7 @@ class DeveloperVelocityTrackerTestCase:
     message: str
     given: List[FinishedTask]
     tracked_developer: str
-    expected: Velocity
+    expected: DeveloperVelocity
 
 
 test_cases: List[DeveloperVelocityTrackerTestCase] = [

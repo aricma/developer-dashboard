@@ -4,16 +4,19 @@ from datetime import datetime as date
 
 import pytest
 
-from business_logic.developer_velocity_tracker import Velocity, DeveloperVelocityTracker
+from business_logic.developer_velocity_tracker import DeveloperVelocityTracker
+from business_logic.models.developer_velocity import DeveloperVelocity
 from domain_models.task import FinishedTask
-from business_logic.test__track_developer_velocity import DeveloperVelocityTrackerTestCase
+from business_logic.test__track_developer_velocity import (
+    DeveloperVelocityTrackerTestCase,
+)
 
 
 @dataclasses.dataclass
 class TeamVelocityTrackerTestCase:
     message: str
     given: List[FinishedTask]
-    expected: Velocity
+    expected: DeveloperVelocity
 
 
 test_cases: List[TeamVelocityTrackerTestCase] = [

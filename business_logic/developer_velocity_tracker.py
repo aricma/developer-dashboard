@@ -6,7 +6,7 @@ from typing import Dict, List
 from business_logic.models import StoryPoints
 from domain_models.task import FinishedTask, Date
 
-Velocity = Dict[Date, StoryPoints]
+from business_logic.models.developer_velocity import DeveloperVelocity
 
 
 class DeveloperVelocityTracker:
