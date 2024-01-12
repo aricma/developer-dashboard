@@ -128,19 +128,6 @@ def redirect_to_logout_page() -> RedirectResponse:
         status_code=307,
     )
 
-
-class MissingAuthenticationTokenCookie(HTTPException):
-
-    def __init__(self):
-        super().__init__("Missing Authentication Cookie")
-
-
-class MissingAccountForAuthenticationToken(HTTPException):
-
-    def __init__(self):
-        super().__init__("Missing account for given authentication token")
-
-
 def refresh_authentication_token_cookie_value(response: Response, old_authentication_token: str) -> Response:
     account: Optional[Account] = business_logic.get_account_for_jwt(old_authentication_token)
     if not account:
