@@ -4,7 +4,8 @@ from typing import Dict
 from dateutil.parser import parse as to_date
 
 from business_logic.date_skipper import DateSkipper
-from business_logic.models import TaskID, Date, StoryPoints
+from business_logic.models.burn_down_forecast import BurnDownForecast
+from business_logic.models.burn_down_forecastable_task import BurnDownForecastableTask
 
 
 @dataclasses.dataclass
@@ -15,6 +16,7 @@ class Task:
 
 
 BurnDownForecast = Dict[Date, StoryPoints]
+Date = str
 
 
 class BurnDownForecaster:
@@ -22,10 +24,12 @@ class BurnDownForecaster:
     def __init__(self, date_skipper: DateSkipper):
         self._date_skipper = date_skipper
 
-    def forcast(self, task: Task, developer_velocity_as_story_points_per_day: float) -> BurnDownForecast:
+    def forcast(
+        self, task: BurnDownForecastableTask, developer_velocity_as_story_points_per_day: float
+    ) -> BurnDownForecast:
         story_points_per_day = developer_velocity_as_story_points_per_day
         remaining_task_story_points = task.story_points
-        next_date = task.start_date
+        next_date = task.date_started
         forecast: BurnDownForecast = {}
 
         while remaining_task_story_points > 0:
