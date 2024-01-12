@@ -3,7 +3,6 @@ import statistics
 from business_logic.burn_down_forecastable_task_aggregator import BurnDownForecastableTaskAggregator
 from business_logic.burn_down_forecastable_task_getter_proxy import BurnDownForecastableTaskGetterProxy
 from business_logic.burn_down_forecaster import BurnDownForecaster
-from business_logic.chart_data_formatter import ChartDataFormatter
 from business_logic.date_skipper import (
     NoDateSkipper,
     # WeekendSkipper
@@ -12,7 +11,6 @@ from business_logic.developer_velocity_business_logic import DeveloperVelocityBu
 from business_logic.dummy_data_task_getter import DummyDataTaskGetter
 from business_logic.models.burn_down_forecast import BurnDownForecast
 from business_logic.models.developer_velocity import DeveloperVelocity
-from business_logic.serializer.misc import Account
 from business_logic.uuid_maker import UUIDMaker
 
 StoryPoints = float
