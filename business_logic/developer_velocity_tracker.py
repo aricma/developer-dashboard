@@ -120,7 +120,7 @@ class DeveloperVelocityTracker:
         if days_between_start_and_end_date > 1:
             developer_velocity: DeveloperVelocity = {}
             for days in range(0, days_between_start_and_end_date + 1):
-                date = str(to_date(start_date) + duration(days=days))
+                date = str((to_date(start_date) + duration(days=days)).date())
                 developer_velocity = {**developer_velocity, date: story_points_per_day}
             return developer_velocity
         return {}
