@@ -3,7 +3,7 @@ from typing import Optional
 
 from fastapi import FastAPI
 from starlette.requests import Request
-from starlette.responses import Response, HTMLResponse, FileResponse, RedirectResponse
+from starlette.responses import HTMLResponse, FileResponse
 
 from business_logic._business_logic import BusinessLogic
 from business_logic.marshalls import Account
@@ -12,6 +12,11 @@ from server.authentication_utils import create_authentication_token_cookie_value
 from web_interface.pages.make_dashboard_burn_down_page import make_dashboard_burn_down_page
 from web_interface.pages.make_dashboard_overview_page import make_dashboard_overview_page
 from web_interface.pages.make_dashboard_velocity_page import make_dashboard_velocity_page
+from server.authentication_utils import (
+    create_authentication_token_cookie_value,
+    authentication_token_is_valid,
+    redirect_to_login_page,
+)
 from web_interface.pages.make_error_page import make_error_page
 
 private_app = FastAPI(
@@ -105,45 +110,21 @@ async def get_dashboard_burn_down_page(request: Request):
     )
 
 
-@private_app.get("/{file_path}")
-async def serve_all_files_that_requested_by_html_files(file_path: Optional[str] = None):
-    resolved_file_path = "index.html" if not file_path else file_path
-    return FileResponse(constants.PATH_TO_HTML_FILES / resolved_file_path)
-
-
-def authentication_token_is_valid(token: Optional[str] = None) -> bool:
-    return token is not None  # ⚠️ TODO: not implemented
-
-
-def redirect_to_login_page() -> RedirectResponse:
-    return RedirectResponse(
-        url="/sign-in",
-        status_code=307,
+def _unsafe_get_account_from_authentication_token_cookie(request: Request) -> Account:
+    optional_authentication_token = request.cookies.get(
+        constants.AUTHENTICATION_TOKEN_COOKIE_NAME
     )
-
-
-def redirect_to_logout_page() -> RedirectResponse:
-    return RedirectResponse(
-        url="/sign-out",
-        status_code=307,
-    )
-
-def refresh_authentication_token_cookie_value(response: Response, old_authentication_token: str) -> Response:
-    account: Optional[Account] = business_logic.get_account_for_jwt(old_authentication_token)
-    if not account:
-        raise MissingAccountForAuthenticationToken()
-    authentication_token = business_logic.unsafe_create_authentication_token(account)
-    response.headers["Set-Cookie"] = create_authentication_token_cookie_value(authentication_token)
-    return response
-
-
-def unsafe_get_account_from_authentication_token_cookie(request: Request) -> Account:
-    optional_authentication_token = request.cookies.get(constants.AUTHENTICATION_TOKEN_COOKIE_NAME)
     if optional_authentication_token:
-        account = business_logic.get_account_for_jwt(optional_authentication_token)
+        account = authentication_business_logic.get_account_for_jwt(
+            optional_authentication_token
+        )
         if account:
             return account
         raise MissingAccountForAuthenticationToken()
     raise MissingAuthenticationTokenCookie()
 
 
+@private_app.get("/{file_path}")
+async def serve_all_files_that_requested_by_html_files(file_path: Optional[str] = None):
+    resolved_file_path = "index.html" if not file_path else file_path
+    return FileResponse(constants.PATH_TO_HTML_FILES / resolved_file_path)
