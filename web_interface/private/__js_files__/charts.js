@@ -114,7 +114,7 @@
         const realBurnDownData = data.filter((each) => !(each?.meta?.estimated))
         const lastDataPointOfRealDataToConnectTheGraphs = realBurnDownData[realBurnDownData.length - 1]
         const estimatedBurnDownData = [
-            lastDataPointOfRealDataToConnectTheGraphs,
+            ...(lastDataPointOfRealDataToConnectTheGraphs ? [lastDataPointOfRealDataToConnectTheGraphs] : []),
             ...data.filter((each) => each?.meta?.estimated),
         ]
         new Chart(element, {
