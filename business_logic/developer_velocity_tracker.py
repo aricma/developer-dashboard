@@ -19,8 +19,8 @@ class DeveloperVelocityTracker:
                 b=self._distribute_story_points_among_days_between_start_and_end_date(
                     start_date=task.date_started,
                     end_date=task.date_finished,
-                    story_points=task.story_points
-                )
+                    story_points=task.story_points,
+                ),
             )
 
         return team_velocity
@@ -53,18 +53,14 @@ class DeveloperVelocityTracker:
                         story_points=self._split_story_points_among_the_assignees(
                             story_points=task.story_points,
                             assignees=task.assignees,
-                        )
-                    )
+                        ),
+                    ),
                 )
         return developer_velocity
 
     def aggregate_velocity(self, a: Velocity, b: Velocity) -> Velocity:
         for date, story_points in b.items():
-            self._add_day_to_velocity(
-                velocity=a,
-                date=date,
-                story_points=story_points
-            )
+            self._add_day_to_velocity(velocity=a, date=date, story_points=story_points)
         return a
 
     @staticmethod
@@ -84,7 +80,9 @@ class DeveloperVelocityTracker:
         return velocity
 
     @staticmethod
-    def _split_story_points_among_the_assignees(story_points: float, assignees: List[str]) -> float:
+    def _split_story_points_among_the_assignees(
+        story_points: float, assignees: List[str]
+    ) -> float:
         return story_points / len(assignees)
 
     @staticmethod
@@ -93,12 +91,14 @@ class DeveloperVelocityTracker:
     ) -> Velocity:
         days_between_start_and_end_date = (to_date(end_date) - to_date(start_date)).days
         if days_between_start_and_end_date == 0:
-            return {
-                start_date: story_points
-            }
+            return {start_date: story_points}
         # add one day, if 1 day is between 2 days we have to divide the story points by 2
-        adjusted_days_between_the_dates_to_divide_by = days_between_start_and_end_date + 1
-        story_points_per_day = story_points / adjusted_days_between_the_dates_to_divide_by
+        adjusted_days_between_the_dates_to_divide_by = (
+            days_between_start_and_end_date + 1
+        )
+        story_points_per_day = (
+            story_points / adjusted_days_between_the_dates_to_divide_by
+        )
         if days_between_start_and_end_date == 1:
             return {
                 start_date: story_points_per_day,
@@ -108,9 +108,6 @@ class DeveloperVelocityTracker:
             developer_velocity: Velocity = {}
             for days in range(0, days_between_start_and_end_date + 1):
                 date = str(to_date(start_date) + duration(days=days))
-                developer_velocity = {
-                    **developer_velocity,
-                    date: story_points_per_day
-                }
+                developer_velocity = {**developer_velocity, date: story_points_per_day}
             return developer_velocity
         return {}
