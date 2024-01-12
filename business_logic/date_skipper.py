@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 
-from dateutil.parser import parse as to_date
-
-Date = str
+from business_logic.models.date import Date
 
 
 class DateSkipper(ABC):
@@ -18,4 +16,4 @@ class NoDateSkipper(DateSkipper):
 
 class WeekendSkipper(DateSkipper):
     def date_should_be_skipped(self, date: Date) -> bool:
-        return to_date(date).weekday() > 4  # 5 & 6 are Sat and Sun
+        return date.is_weekend()
