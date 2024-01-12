@@ -1,7 +1,7 @@
 # --- constants ----------------------------------------------------------------
 
-static_folder_name = ".static"
-tasks_dummy_data_file_path = "./dummy_data/tasks_dummy_data.json"
+static_folder_name = .static
+tasks_dummy_data_file_path = ./dummy_data/tasks_dummy_data.json
 
 # --- shortcuts ----------------------------------------------------------------
 
