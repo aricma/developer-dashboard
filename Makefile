@@ -14,6 +14,7 @@ build: reset statics $(tasks_dummy_data_file_path)
 # ------------------------------------------------------------------------------
 
 refactor:
+	poetry run black .
 	poetry run ruff --fix
 
 lint:
