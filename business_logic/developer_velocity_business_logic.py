@@ -33,15 +33,13 @@ class DeveloperVelocityBusinessLogic:
         self._chart_data_formatter = ChartDataFormatter()
 
     def get_velocity_data_file_name_for_developer(
-            self, account: Account, time_in_weeks: int
+        self, account: Account, time_in_weeks: int
     ) -> str:
         data = self._get_velocity_data_for_developer(
-            account=account,
-            time_in_weeks=time_in_weeks
+            account=account, time_in_weeks=time_in_weeks
         )
         return self.get_file_path_for_data(
-            data=dataclasses.asdict(data),
-            account_id=account.id
+            data=dataclasses.asdict(data), account_id=account.id
         )
 
     def get_file_path_for_data(self, data: dict, account_id: str) -> str:
@@ -117,7 +115,7 @@ class DeveloperVelocityBusinessLogic:
 
     @staticmethod
     def _make_velocity_data_file_name_for_developer(
-            developer_id: str, data_finger_print: str
+        developer_id: str, data_finger_print: str
     ) -> str:
         return f"{developer_id}-velocity-data-{data_finger_print}.json"
 

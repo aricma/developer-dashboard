@@ -5,7 +5,6 @@ T = TypeVar("T")
 
 
 class TaskAggregator(ABC, Generic[T]):
-
     @abstractmethod
     def aggregate(self, tasks: List[T]) -> T:
         ...

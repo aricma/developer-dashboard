@@ -1,13 +1,19 @@
 import statistics
 
-from business_logic.burn_down_forecastable_task_aggregator import BurnDownForecastableTaskAggregator
-from business_logic.burn_down_forecastable_task_getter_proxy import BurnDownForecastableTaskGetterProxy
+from business_logic.burn_down_forecastable_task_aggregator import (
+    BurnDownForecastableTaskAggregator,
+)
+from business_logic.burn_down_forecastable_task_getter_proxy import (
+    BurnDownForecastableTaskGetterProxy,
+)
 from business_logic.burn_down_forecaster import BurnDownForecaster
 from business_logic.date_skipper import (
     NoDateSkipper,
     # WeekendSkipper
 )
-from business_logic.developer_velocity_business_logic import DeveloperVelocityBusinessLogic
+from business_logic.developer_velocity_business_logic import (
+    DeveloperVelocityBusinessLogic,
+)
 from business_logic.dummy_data_task_getter import DummyDataTaskGetter
 from business_logic.models.burn_down_forecast import BurnDownForecast
 from business_logic.models.developer_velocity import DeveloperVelocity
@@ -30,16 +36,14 @@ class BurnDownBusinessLogic:
             date_skipper=NoDateSkipper(),
             # date_skipper=WeekendSkipper(),
         )
-        self._task_aggregator = BurnDownForecastableTaskAggregator(
-            id_maker=UUIDMaker()
-        )
+        self._task_aggregator = BurnDownForecastableTaskAggregator(id_maker=UUIDMaker())
 
     def get_task_burn_down_data_for_account(self) -> BurnDownForecast:
         tasks = self._task_getter.get_tasks()
         aggregated_task = self._task_aggregator.aggregate(tasks)
         return self._burn_down_forecaster.forcast(
             task=aggregated_task,
-            developer_velocity_as_story_points_per_day=self._get_average_developer_velocity()
+            developer_velocity_as_story_points_per_day=self._get_average_developer_velocity(),
         )
 
     def _get_average_developer_velocity(self) -> StoryPoints:

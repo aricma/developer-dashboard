@@ -47,9 +47,9 @@ class BurnDownChartDataFile:
 
 class ChartDataFormatter:
     def to_single_developer_velocity_chart_data(
-            self,
-            developer_velocity: DeveloperVelocity,
-            average_developer_velocity: DeveloperVelocity,
+        self,
+        developer_velocity: DeveloperVelocity,
+        average_developer_velocity: DeveloperVelocity,
     ) -> VelocityChartDataFile:
         return VelocityChartDataFile(
             data_points=VelocityChartData(
@@ -67,7 +67,9 @@ class ChartDataFormatter:
         )
 
     @staticmethod
-    def to_burn_down_chart_data(burn_down_forecast: BurnDownForecast) -> BurnDownChartDataFile:
+    def to_burn_down_chart_data(
+        burn_down_forecast: BurnDownForecast,
+    ) -> BurnDownChartDataFile:
         return BurnDownChartDataFile(
             data_points=[
                 BurnDownChartDataPoint(
@@ -75,7 +77,7 @@ class ChartDataFormatter:
                     y=story_points,
                     meta=BurnDownChartDataPointMetaData(
                         estimated=True,
-                    )
+                    ),
                 )
                 for date, story_points in burn_down_forecast.items()
             ]
@@ -83,7 +85,7 @@ class ChartDataFormatter:
 
     @staticmethod
     def velocity_to_chart_data_points(
-            velocity: DeveloperVelocity,
+        velocity: DeveloperVelocity,
     ) -> VelocityChartDataPoints:
         return [
             VelocityChartDataPoint(
@@ -95,6 +97,6 @@ class ChartDataFormatter:
 
     @staticmethod
     def sort_data_points_by_date(
-            data_points: VelocityChartDataPoints,
+        data_points: VelocityChartDataPoints,
     ) -> VelocityChartDataPoints:
         return sorted(data_points, key=lambda data_point: data_point.x)

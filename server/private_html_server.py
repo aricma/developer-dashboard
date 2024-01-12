@@ -51,7 +51,7 @@ async def server_error_exception_handler(_, exc: HTTPException):
             content=make_error_page(
                 error_code="500",
                 message=f'There was an unknown error raised by the server: "{error_message}". '
-                        "Please create a ticket at https://github.com/aricma/developer-dashboard.",
+                "Please create a ticket at https://github.com/aricma/developer-dashboard.",
             )
         )
 
@@ -77,7 +77,7 @@ async def check_for_authentication_cookie(request: Request, call_next):
         constants.AUTHENTICATION_TOKEN_COOKIE_NAME
     )
     if optional_authentication_token is not None and authentication_token_is_valid(
-            token=optional_authentication_token
+        token=optional_authentication_token
     ):
         response = await call_next(request)
         try:
@@ -151,8 +151,7 @@ async def get_dashboard_burn_down_page(request: Request):
     )
     return HTMLResponse(
         content=make_dashboard_burn_down_page(
-            user_name=account.name,
-            data_file_name=file_name
+            user_name=account.name, data_file_name=file_name
         )
     )
 

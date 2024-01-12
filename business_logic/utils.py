@@ -62,7 +62,7 @@ Update = Callable[[str], str]
 
 class FileUpdater(UpdaterInterface):
     def __init__(
-            self, reader: ReaderInterface, writer: WriterInterface, update: Update
+        self, reader: ReaderInterface, writer: WriterInterface, update: Update
     ):
         self._reader = reader
         self._writer = writer

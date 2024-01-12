@@ -6,7 +6,6 @@ from business_logic.models.task import Task
 
 
 class BurnDownForecastableTaskGetterProxy(TaskGetter[BurnDownForecastableTask]):
-
     def __init__(self, task_getter: TaskGetter[Task]):
         self._task_getter = task_getter
 

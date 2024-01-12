@@ -5,7 +5,6 @@ T = TypeVar("T")
 
 
 class Maker(ABC, Generic[T]):
-
     @abstractmethod
     def make(self) -> T:
         ...

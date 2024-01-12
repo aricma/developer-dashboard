@@ -3,7 +3,6 @@ import datetime
 
 
 class Date:
-
     def __init__(self, year: int, month: int, day: int):
         self._year = year
         self._month = month
