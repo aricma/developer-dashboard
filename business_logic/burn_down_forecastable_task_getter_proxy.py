@@ -11,13 +11,13 @@ class BurnDownForecastableTaskGetterProxy(TaskGetter[BurnDownForecastableTask]):
 
     def get_tasks(self) -> List[BurnDownForecastableTask]:
         return [
-            self._to_velocity_trackable_task(task)
+            self._to_burn_down_forecastable_task(task)
             for task in self._task_getter.get_tasks()
-            if task.date_finished is not None
+            if task.date_finished is None
         ]
 
     @staticmethod
-    def _to_velocity_trackable_task(task: Task) -> BurnDownForecastableTask:
+    def _to_burn_down_forecastable_task(task: Task) -> BurnDownForecastableTask:
         return BurnDownForecastableTask(
             id=task.id,
             story_points=task.story_points,
