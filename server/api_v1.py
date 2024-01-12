@@ -41,26 +41,6 @@ business_logic = BusinessLogic(
 )
 
 
-@app.get("/developers")
-async def get_all_developers():
-    all_developer_data = business_logic.unsafe_read_developer_data()
-    return JSONResponse(
-        content={
-            "developers": [each.model_dump() for each in all_developer_data]
-        }
-    )
-
-
-@app.get("/tasks")
-async def get_all_tasks():
-    all_tasks_data = business_logic.unsafe_read_task_data()
-    return JSONResponse(
-        content={
-            "tasks": [each.model_dump() for each in all_tasks_data]
-        }
-    )
-
-
 @app.post("/login")  # ⚠️ Not RESTFULL
 async def login(email: str = Form(), password: str = Form()) -> JSONResponse:
     return JSONResponse(
