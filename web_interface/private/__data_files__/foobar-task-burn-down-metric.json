@@ -1,66 +1,66 @@
 {
   "data_points": [
     {
-      "x": "January",
+      "x": "2023-09-18",
       "y": 34
     },
     {
-      "x": "February",
+      "x": "2023-09-19",
       "y": 30
     },
     {
-      "x": "March",
+      "x": "2023-09-20",
       "y": 31
     },
     {
-      "x": "April",
+      "x": "2023-09-21",
       "y": 28
     },
     {
-      "x": "May",
+      "x": "2023-09-22",
       "y": 27
     },
     {
-      "x": "June",
+      "x": "2023-09-23",
       "y": 26
     },
     {
-      "x": "July",
+      "x": "2023-09-24",
       "y": 24,
       "meta": {
         "estimated": true
       }
     },
     {
-      "x": "August",
+      "x": "2023-09-25",
       "y": 20,
       "meta": {
         "estimated": true
       }
     },
     {
-      "x": "September",
+      "x": "2023-09-26",
       "y": 15,
       "meta": {
         "estimated": true
       }
     },
     {
-      "x": "October",
+      "x": "2023-09-27",
       "y": 10,
       "meta": {
         "estimated": true
       }
     },
     {
-      "x": "November",
+      "x": "2023-09-28",
       "y": 4,
       "meta": {
         "estimated": true
       }
     },
     {
-      "x": "December",
+      "x": "2023-09-29",
       "y": 3,
       "meta": {
         "estimated": true
