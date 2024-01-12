@@ -29,7 +29,7 @@ tests:
 .PHONY: server
 server:
 	STATIC_FOLDER_NAME=$(static_folder_name) \
-	VELOCITY_DUMMY_DATA_FILE_PATH=$(tasks_dummy_data_file_path) \
+	TASK_DUMMY_DATA_FILE_PATH=$(tasks_dummy_data_file_path) \
 	poetry run uvicorn server.__main__:app --reload
 
 $(tasks_dummy_data_file_path):
