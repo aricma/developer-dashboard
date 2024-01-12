@@ -1,6 +1,6 @@
 from http.client import HTTPException
 
-from business_logic.marshalls import Account
+from business_logic.serializer.misc import Account
 
 
 class ServerError(HTTPException):
