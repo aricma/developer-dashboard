@@ -1,6 +1,7 @@
-from typing import Dict
+from typing import Dict, Union
+
+from business_logic.models.story_points import StoryPoints, EstimatedStoryPoints
 
 Date = str
-StoryPoints = float
 
-BurnDownForecast = Dict[Date, StoryPoints]
+BurnDownForecast = Dict[Date, Union[StoryPoints, EstimatedStoryPoints]]
