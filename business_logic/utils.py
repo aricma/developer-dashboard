@@ -1,8 +1,11 @@
+import hashlib
 from abc import ABC, abstractmethod
 from datetime import date
-from typing import Generic, TypeVar, Callable
+from pathlib import Path
+from typing import Generic, TypeVar, Callable, Union
 
 from business_logic.models import Date
+from yaml import load, Loader
 
 
 def print_api_title() -> None:
@@ -74,3 +77,12 @@ class FileUpdater(UpdaterInterface):
 
 def make_date(year: int, month: int, day: int) -> Date:
     return str(date(year, month, day))
+
+
+def hash_string_value(value: str) -> str:
+    return str(hashlib.md5(value.encode("utf-8")).hexdigest())
+
+
+def read_yml_file_content(path: Union[Path, str]) -> dict:
+    with open(path, "r") as reader:
+        return load(reader.read(), Loader=Loader)
