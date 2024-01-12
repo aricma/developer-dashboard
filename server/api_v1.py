@@ -29,8 +29,8 @@ async def server_error_exception_handler(_, exc: HTTPException):
             status_code=500,
             content={
                 "message": "ServerError: "
-                           f"Exception with name \"{exc.__class__.__name__}\" got raised but not handled.",
-            }
+                f'Exception with name "{exc.__class__.__name__}" got raised but not handled.',
+            },
         )
 
 
@@ -60,7 +60,5 @@ async def register_account(
         name, email, password
     )
     return JSONResponse(
-        content={
-            "message": f"Account with name {account.name} was created."
-        }
+        content={"message": f"Account with name {account.name} was created."}
     )
