@@ -48,7 +48,9 @@ class BurnDownBusinessLogic:
 
     def _get_average_developer_velocity(self) -> StoryPoints:
         return self._get_mean_developer_velocity(
-            developer_velocity=self._velocity_bs.get_average_developer_velocity()
+            developer_velocity=self._velocity_bs.get_average_developer_velocity(
+                time_in_weeks=8
+            )
         )
 
     @staticmethod

@@ -12,6 +12,8 @@ from business_logic.chart_data_formatter import ChartDataFormatter
 from business_logic.developer_velocity_business_logic import (
     DeveloperVelocityBusinessLogic,
 )
+from business_logic.models.date import Date
+from business_logic.models.developer_velocity import DeveloperVelocity
 from business_logic.serializer.misc import Account
 from server import constants
 from server.authentication_utils import (
@@ -64,7 +66,7 @@ burn_down_business_logic = BurnDownBusinessLogic(
     path_to_tasks_json_file=str(envorinment.TASK_DUMMY_DATA_FILE_PATH)
 )
 
-chart_formatter = ChartDataFormatter()
+chart_data_formatter = ChartDataFormatter()
 
 authentication_business_logic = AuthenticationBusinessLogic(
     path_to_accounts_yml_file=str(constants.PATH_TO_ACCOUNTS_YML_FILE),
@@ -115,28 +117,89 @@ async def get_dashboard_overview_page(request: Request):
 @private_app.get("/dashboard/velocity")
 async def get_dashboard_velocity_page(request: Request):
     account = _unsafe_get_account_from_authentication_token_cookie(request)
+    two_weeks_of_developer_velocity = (
+        developer_velocity_business_logic.get_developer_velocity(
+            account=account,
+            time_in_weeks=2,
+        )
+    )
+    two_weeks_of_average_developer_velocity = (
+        developer_velocity_business_logic.get_average_developer_velocity(
+            time_in_weeks=2,
+        )
+    )
+    four_weeks_of_developer_velocity = (
+        developer_velocity_business_logic.get_developer_velocity(
+            account=account,
+            time_in_weeks=4,
+        )
+    )
+    four_weeks_of_average_developer_velocity = (
+        developer_velocity_business_logic.get_average_developer_velocity(
+            time_in_weeks=4,
+        )
+    )
+    eight_weeks_of_developer_velocity = (
+        developer_velocity_business_logic.get_developer_velocity(
+            account=account,
+            time_in_weeks=8,
+        )
+    )
+    eight_weeks_of_average_developer_velocity = (
+        developer_velocity_business_logic.get_average_developer_velocity(
+            time_in_weeks=8,
+        )
+    )
     return HTMLResponse(
         content=make_dashboard_velocity_page(
             user_name=account.name,
             last_two_weeks_velocity_chart_data_file_name=(
-                developer_velocity_business_logic.get_velocity_data_file_name_for_developer(
-                    account=account,
-                    time_in_weeks=2,
+                _get_file_name_for_developer_velocity(
+                    account_id=account.id,
+                    developer_velocity=two_weeks_of_developer_velocity,
+                    average_developer_velocity=two_weeks_of_average_developer_velocity,
+                    tracking_start_date=Date.today().go_back_weeks(2),
                 )
             ),
             last_four_weeks_velocity_chart_data_file_name=(
-                developer_velocity_business_logic.get_velocity_data_file_name_for_developer(
-                    account=account,
-                    time_in_weeks=4,
+                _get_file_name_for_developer_velocity(
+                    account_id=account.id,
+                    developer_velocity=four_weeks_of_developer_velocity,
+                    average_developer_velocity=four_weeks_of_average_developer_velocity,
+                    tracking_start_date=Date.today().go_back_weeks(4),
                 )
             ),
             last_eight_weeks_velocity_chart_data_file_name=(
-                developer_velocity_business_logic.get_velocity_data_file_name_for_developer(
-                    account=account,
-                    time_in_weeks=8,
+                _get_file_name_for_developer_velocity(
+                    account_id=account.id,
+                    developer_velocity=eight_weeks_of_developer_velocity,
+                    average_developer_velocity=eight_weeks_of_average_developer_velocity,
+                    tracking_start_date=Date.today().go_back_weeks(8),
                 )
             ),
         )
+    )
+
+
+def _get_file_name_for_developer_velocity(
+    developer_velocity: DeveloperVelocity,
+    average_developer_velocity: DeveloperVelocity,
+    account_id: str,
+    tracking_start_date: Date,
+) -> str:
+    chart_data = chart_data_formatter.to_single_developer_velocity_chart_data(
+        developer_velocity=developer_velocity_business_logic.filter_velocity_before_given_start_date(
+            velocity=developer_velocity,
+            start_date=tracking_start_date,
+        ),
+        average_developer_velocity=developer_velocity_business_logic.filter_velocity_before_given_start_date(
+            velocity=average_developer_velocity,
+            start_date=tracking_start_date,
+        ),
+    )
+    return developer_velocity_business_logic.get_file_path_for_data(
+        data=dataclasses.asdict(chart_data),
+        account_id=account_id,
     )
 
 
@@ -144,7 +207,7 @@ async def get_dashboard_velocity_page(request: Request):
 async def get_dashboard_burn_down_page(request: Request):
     account = _unsafe_get_account_from_authentication_token_cookie(request)
     burn_down_forcast = burn_down_business_logic.get_task_burn_down_data_for_account()
-    chart_data = chart_formatter.to_burn_down_chart_data(burn_down_forcast)
+    chart_data = chart_data_formatter.to_burn_down_chart_data(burn_down_forcast)
     file_name = developer_velocity_business_logic.get_file_path_for_data(
         data=dataclasses.asdict(chart_data),
         account_id=account.id,

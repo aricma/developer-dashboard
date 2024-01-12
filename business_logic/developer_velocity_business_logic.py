@@ -1,12 +1,7 @@
-import dataclasses
 import json
 from pathlib import Path
 from typing import Union, List
 
-from business_logic.chart_data_formatter import (
-    ChartDataFormatter,
-    VelocityChartDataFile,
-)
 from business_logic.developer_velocity_tracker import DeveloperVelocityTracker
 from business_logic.models.date import Date
 from business_logic.models.developer_velocity import DeveloperVelocity
@@ -28,16 +23,25 @@ class DeveloperVelocityBusinessLogic:
             )
         )
         self._velocity_tracker = DeveloperVelocityTracker()
-        self._chart_data_formatter = ChartDataFormatter()
 
-    def get_velocity_data_file_name_for_developer(
+    def get_developer_velocity(
         self, account: Account, time_in_weeks: int
-    ) -> str:
-        data = self._get_velocity_data_for_developer(
-            account=account, time_in_weeks=time_in_weeks
+    ) -> DeveloperVelocity:
+        return self._velocity_tracker.track_developer_velocity(
+            tasks=self._get_tasks(time_in_weeks=time_in_weeks),
+            tracked_developer=account.name,
         )
-        return self.get_file_path_for_data(
-            data=dataclasses.asdict(data), account_id=account.id
+
+    def get_average_developer_velocity(self, time_in_weeks: int) -> DeveloperVelocity:
+        return self._velocity_tracker.track_average_developer_velocity(
+            tasks=self._get_tasks(time_in_weeks=time_in_weeks)
+        )
+
+    def _get_tasks(self, time_in_weeks: int) -> List[VelocityTrackableTask]:
+        tracking_start_date = Date.today().go_back_weeks(weeks=time_in_weeks)
+        return self._filter_tasks_before_given_start_date(
+            tasks=self._task_getter.get_tasks(),
+            start_date=tracking_start_date,
         )
 
     def get_file_path_for_data(self, data: dict, account_id: str) -> str:
@@ -49,40 +53,6 @@ class DeveloperVelocityBusinessLogic:
             self._write_velocity_data_to_file(file_name, formatted_data)
         return file_name
 
-    def get_average_developer_velocity(self) -> DeveloperVelocity:
-        tracking_start_date = Date.today().go_back_weeks(weeks=8)
-        tasks = self._filter_tasks_before_given_start_date(
-            tasks=self._task_getter.get_tasks(),
-            start_date=tracking_start_date,
-        )
-        return self._velocity_tracker.track_average_developer_velocity(tasks=tasks)
-
-    def _get_velocity_data_for_developer(
-        self, account: Account, time_in_weeks: int
-    ) -> VelocityChartDataFile:
-        tracking_start_date = Date.today().go_back_weeks(weeks=time_in_weeks)
-        tasks = self._filter_tasks_before_given_start_date(
-            tasks=self._task_getter.get_tasks(),
-            start_date=tracking_start_date,
-        )
-        developer_velocity_data = self._velocity_tracker.track_developer_velocity(
-            tasks=tasks,
-            tracked_developer=account.name,
-        )
-        average_developer_velocity_data = (
-            self._velocity_tracker.track_average_developer_velocity(tasks=tasks)
-        )
-        return self._chart_data_formatter.to_single_developer_velocity_chart_data(
-            developer_velocity=self._filter_velocity_before_given_start_date(
-                velocity=developer_velocity_data,
-                start_date=tracking_start_date,
-            ),
-            average_developer_velocity=self._filter_velocity_before_given_start_date(
-                velocity=average_developer_velocity_data,
-                start_date=tracking_start_date,
-            ),
-        )
-
     @staticmethod
     def _filter_tasks_before_given_start_date(
         tasks: List[VelocityTrackableTask], start_date: Date
@@ -90,7 +60,7 @@ class DeveloperVelocityBusinessLogic:
         return [task for task in tasks if task.date_finished >= start_date]
 
     @staticmethod
-    def _filter_velocity_before_given_start_date(
+    def filter_velocity_before_given_start_date(
         velocity: DeveloperVelocity, start_date: Date
     ) -> DeveloperVelocity:
         return {
