@@ -13,6 +13,7 @@ from business_logic.chart_data_formatter import ChartDataFormatter
 from business_logic.developer_velocity_business_logic import (
     DeveloperVelocityBusinessLogic,
 )
+from business_logic.developer_velocity_decimator import DeveloperVelocityDecimator
 from business_logic.models.date import Date
 from business_logic.models.developer_velocity import DeveloperVelocity
 from business_logic.serializer.misc import Account
@@ -70,7 +71,10 @@ burn_down_business_logic = BurnDownBusinessLogic(
 chart_data_formatter = ChartDataFormatter(
     burn_down_forecast_decimator=BurnDownForecastDecimator(
         max_amount_of_data_points_per_forecast=20
-    )
+    ),
+    developer_velocity_decimator=DeveloperVelocityDecimator(
+        max_amount_of_data_points_per_velocity=20
+    ),
 )
 
 authentication_business_logic = AuthenticationBusinessLogic(

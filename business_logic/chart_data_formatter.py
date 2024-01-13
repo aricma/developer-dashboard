@@ -48,24 +48,35 @@ class BurnDownChartDataFile:
 
 
 class ChartDataFormatter:
-    def __init__(self, burn_down_forecast_decimator: Decimator[BurnDownForecast]):
+    def __init__(
+        self,
+        burn_down_forecast_decimator: Decimator[BurnDownForecast],
+        developer_velocity_decimator: Decimator[DeveloperVelocity],
+    ):
         self._burn_down_forecast_decimator = burn_down_forecast_decimator
+        self._developer_velocity_decimator = developer_velocity_decimator
 
     def to_single_developer_velocity_chart_data(
         self,
         developer_velocity: DeveloperVelocity,
         average_developer_velocity: DeveloperVelocity,
     ) -> VelocityChartDataFile:
+        decimated_developer_velocity = self._developer_velocity_decimator.decimate(
+            developer_velocity
+        )
+        decimated_average_developer_velocity = (
+            self._developer_velocity_decimator.decimate(average_developer_velocity)
+        )
         return VelocityChartDataFile(
             data_points=VelocityChartData(
                 developer_velocity=self.sort_data_points_by_date(
                     data_points=self.velocity_to_chart_data_points(
-                        velocity=developer_velocity
+                        velocity=decimated_developer_velocity
                     ),
                 ),
                 average_developer_velocity=self.sort_data_points_by_date(
                     data_points=self.velocity_to_chart_data_points(
-                        velocity=average_developer_velocity
+                        velocity=decimated_average_developer_velocity
                     ),
                 ),
             )
