@@ -231,12 +231,17 @@ async def get_dashboard_burn_down_page(request: Request):
         burn_down_forecast = burn_down_business_logic.get_task_burn_down_data(
             task_id=task.id
         )
+        if burn_down_forecast is None:
+            raise TaskNotFound(task_id=task.id)
         chart_data_for_task = chart_data_formatter.to_burn_down_chart_data(
             burn_down_forecast
         )
         chart_data_file_name = developer_velocity_business_logic.get_file_path_for_data(
             data=dataclasses.asdict(chart_data_for_task),
             account_id=account.id,
+        )
+        estimated_finish_date = _get_last_date_from_burn_down_forecast(
+            burn_down_forecast
         )
         burn_down_tasks.append(
             BurnDownPageTask(
@@ -246,8 +251,10 @@ async def get_dashboard_burn_down_page(request: Request):
                 story_points=task.story_points,
                 chart_data_file_name=chart_data_file_name,
                 link_to_task_detail_page=f"/{task.id}",
-                estimated_finish_date=_get_last_date_from_burn_down_forecast(
-                    burn_down_forecast
+                estimated_finish_date=(
+                    estimated_finish_date
+                    if estimated_finish_date is not None
+                    else "No finish date estimated"
                 ),
                 link_to_original_task_page="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl?retiredLocale=de",
             )
@@ -261,6 +268,11 @@ async def get_dashboard_burn_down_page(request: Request):
     )
 
 
+class TaskNotFound(ValueError, HTTPException):
+    def __init__(self, task_id: str):
+        super().__init__(f'No task was found for given task_id: "{task_id}".')
+
+
 def _get_last_date_from_burn_down_forecast(
     burn_down_forecast: BurnDownForecast,
 ) -> Optional[str]:
@@ -271,6 +283,8 @@ def _get_last_date_from_burn_down_forecast(
             last_date = next_date
         elif next_date > last_date:
             last_date = next_date
+    if last_date is None:
+        return None
     return last_date.to_string()
 
 
