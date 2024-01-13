@@ -1,6 +1,7 @@
 import dataclasses
 from typing import List
 
+from server.utils import limit_string
 from web_interface.private.components.make_accordion_html import make_accordion_html
 from web_interface.private.components.make_accordion_item_html import (
     make_accordion_item_html,
@@ -43,7 +44,10 @@ def make_dashboard_burn_down_detail_body_html(
                             accordion_title=task.name,
                             accordion_content=[
                                 make_burn_down_task_accordion_item_html(
-                                    description=task.description,
+                                    description=limit_string(
+                                        value=task.description,
+                                        character_limit=1000,
+                                    ),
                                     link_to_task_detail_page=task.link_to_task_detail_page,
                                     chart_data_file_name=task.chart_data_file_name,
                                     assigned_developers=task.assignees,
