@@ -1,0 +1,25 @@
+<div class='container'>
+    <div class='row gx-5 justify-content-between align-items-stretch'>
+        <div class='col-lg'>
+            <dl class='row'>
+                <dt>Description</dt>
+                <dd>{description}</dd>
+            </dl>
+        </div>
+        <div class='col-lg'>
+            <dl class='row'>
+                <dt>Burn Down Chart</dt>
+                <dd>{chart_html}</dd>
+                <dt>Estimated Finish Date</dt>
+                <dd>{estimated_finish_date}</dd>
+                <dt>Developer Assigned</dt>
+                <dd>{assigned_developers}</dd>
+            </dl>
+            <div class='row gx-5 justify-content-end align-items-center'>
+                <span class='col me-2'>Go To: </span>
+                <a href='{secondary_action_link}' target='_blank' class='col btn btn-secondary me-2'>{secondary_action_title}</a>
+                <a href='{primary_action_link}' class='col btn btn-primary'>{primary_action_title}</a>
+            </div>
+        </div>
+    </div>
+</div>
