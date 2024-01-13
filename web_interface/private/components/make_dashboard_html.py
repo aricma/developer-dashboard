@@ -11,6 +11,7 @@ def make_dashboard_html(
     user_name: str,
     title: str,
     content: HTMLElement,
+    active_menu_link: str,
 ) -> str:
     return make_html_template(
         template_name="dashboard",
@@ -21,17 +22,19 @@ def make_dashboard_html(
                     title="Overview",
                     link="/overview",
                     icon_id="house-fill",
+                    is_active=active_menu_link == "/overview",
                 ),
                 make_dashboard_main_menu_item_html(
                     title="Developer Velocity",
                     link="/velocity",
                     icon_id="speedometer",
+                    is_active=active_menu_link == "/velocity",
                 ),
                 make_dashboard_main_menu_item_html(
                     title="Task Burn Down Estimation",
                     link="/burn-down",
                     icon_id="fire",
-                    is_active=True,
+                    is_active=active_menu_link == "/burn-down",
                 ),
             ],
             "detail_children": [

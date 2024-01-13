@@ -19,6 +19,7 @@ def make_dashboard_burn_down_page(
     return make_dashboard_html(
         user_name=user_name,
         title="Task Burn Down Estimation",
+        active_menu_link="/burn-down",
         content=[
             make_chart_html(
                 data_file_name=data_file_name,

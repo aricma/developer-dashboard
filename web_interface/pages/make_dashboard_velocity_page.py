@@ -21,6 +21,7 @@ def make_dashboard_velocity_page(
     return make_dashboard_html(
         user_name=user_name,
         title="Developer Velocity",
+        active_menu_link="/velocity",
         content=[
             make_tabs_html(
                 children=[

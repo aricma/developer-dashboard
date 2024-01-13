@@ -25,6 +25,7 @@ def make_dashboard_overview_page(
     return make_dashboard_html(
         user_name=user_name,
         title="Overview",
+        active_menu_link="/overview",
         content=[
             make_dashboard_cards_html(
                 children=[
