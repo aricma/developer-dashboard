@@ -9,6 +9,7 @@ from datetime import timedelta as duration, datetime
 import faker
 
 NUMBER_OF_CREATED_TASKS = 8 * 5  # 8 weeks x 1 per work day
+INITIAL_SUB_TASKS = 12
 ABSOLUTE_START_DATE = str(datetime(year=2023, month=8, day=1))
 ABSOLUTE_END_DATE = str(datetime.now())
 
@@ -222,7 +223,7 @@ def make_random_task(number_of_sub_tasks: int):
 def make_random_tasks():
     return {
         "tasks": [
-            asdict(make_random_task(int(random.randrange(12))))
+            asdict(make_random_task(int(random.randrange(INITIAL_SUB_TASKS))))
             for _ in range(NUMBER_OF_CREATED_TASKS)
         ]
     }
