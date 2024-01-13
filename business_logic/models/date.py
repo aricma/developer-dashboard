@@ -51,6 +51,9 @@ class Date:
             day=self._day,
         )
 
+    def to_human_readable(self) -> str:
+        return self.to_datetime_date().strftime("%A, %d %B %Y")
+
     def add_days(self, days: int) -> "Date":
         return self.from_datetime_date(self.to_datetime_date() + duration(days=days))
 

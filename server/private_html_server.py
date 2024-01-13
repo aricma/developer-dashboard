@@ -252,7 +252,7 @@ async def get_dashboard_burn_down_page(request: Request):
                 chart_data_file_name=chart_data_file_name,
                 link_to_task_detail_page=f"/{task.id}",
                 estimated_finish_date=(
-                    estimated_finish_date
+                    Date.from_string(estimated_finish_date).to_human_readable()
                     if estimated_finish_date is not None
                     else "No finish date estimated"
                 ),
