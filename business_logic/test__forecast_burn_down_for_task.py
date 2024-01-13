@@ -29,7 +29,7 @@ class ForecastBurnDownForTaskTestCase:
 test_cases: List[ForecastBurnDownForTaskTestCase] = [
     ForecastBurnDownForTaskTestCase(
         message="Given a task started today with a developer velocity same as the tasks story points,"
-                "when called then forecasts the task to be done by today",
+        "when called then forecasts the task to be done by today",
         task=BurnDownForecastableTask(
             id="1",
             date_started=TODAY,
@@ -40,7 +40,7 @@ test_cases: List[ForecastBurnDownForTaskTestCase] = [
     ),
     ForecastBurnDownForTaskTestCase(
         message="Given a task started today with a developer velocity higher then the tasks story points,"
-                "when called then forecasts the task to be done by today",
+        "when called then forecasts the task to be done by today",
         task=BurnDownForecastableTask(
             id="1",
             date_started=TODAY,
@@ -51,18 +51,21 @@ test_cases: List[ForecastBurnDownForTaskTestCase] = [
     ),
     ForecastBurnDownForTaskTestCase(
         message="Given a tasks started today with a developer velocity lower then the tasks story points,"
-                "when called then forecasts the task to be done by tomorrow",
+        "when called then forecasts the task to be done by tomorrow",
         task=BurnDownForecastableTask(
             id="1",
             date_started=TODAY,
             story_points=6,
         ),
         developer_velocity_as_story_points_per_day=3,
-        expected_forecast={TODAY.to_string(): EstimatedStoryPoints(3), TOMORROW.to_string(): EstimatedStoryPoints(0)},
+        expected_forecast={
+            TODAY.to_string(): EstimatedStoryPoints(3),
+            TOMORROW.to_string(): EstimatedStoryPoints(0),
+        },
     ),
     ForecastBurnDownForTaskTestCase(
         message="Given a tasks started today with a developer velocity much lower then the tasks story points,"
-                "when called then returns expected long forecast",
+        "when called then returns expected long forecast",
         task=BurnDownForecastableTask(
             id="1",
             date_started=TODAY,
@@ -80,9 +83,9 @@ test_cases: List[ForecastBurnDownForTaskTestCase] = [
     ),
     ForecastBurnDownForTaskTestCase(
         message="Given a tasks started 3 days in the past "
-                "with a developer velocity much lower then the tasks story points,"
-                "when called then returns expected long forecast "
-                "from past over today til the expected forecasted end",
+        "with a developer velocity much lower then the tasks story points,"
+        "when called then returns expected long forecast "
+        "from past over today til the expected forecasted end",
         task=BurnDownForecastableTask(
             id="1",
             date_started=THREE_DAYS_AGO,
@@ -105,11 +108,10 @@ test_cases: List[ForecastBurnDownForTaskTestCase] = [
     "test_case", test_cases, ids=[each.message for each in test_cases]
 )
 def test__forecast_burn_down_for_task(
-        test_case: ForecastBurnDownForTaskTestCase,
+    test_case: ForecastBurnDownForTaskTestCase,
 ) -> None:
     brun_down_fore_caster = BurnDownForecaster(
-        date_skipper=NoDateSkipper(),
-        date_classifier=DateClassifier(today=TODAY)
+        date_skipper=NoDateSkipper(), date_classifier=DateClassifier(today=TODAY)
     )
     forcast = brun_down_fore_caster.forcast(
         task=test_case.task,
@@ -121,7 +123,7 @@ def test__forecast_burn_down_for_task(
 def test__forecast_burn_down_for_task_with_weekend_skipper() -> None:
     test_case = ForecastBurnDownForTaskTestCase(
         message="Given a tasks started on given today with a developer velocity much lower then the tasks story points,"
-                "when called with injected WeekendSkipper then returns expected long forecast",
+        "when called with injected WeekendSkipper then returns expected long forecast",
         task=BurnDownForecastableTask(
             id="1",
             date_started=TODAY,
@@ -138,8 +140,7 @@ def test__forecast_burn_down_for_task_with_weekend_skipper() -> None:
         },
     )
     brun_down_fore_caster = BurnDownForecaster(
-        date_skipper=WeekendSkipper(),
-        date_classifier=DateClassifier(today=TODAY)
+        date_skipper=WeekendSkipper(), date_classifier=DateClassifier(today=TODAY)
     )
     forcast = brun_down_fore_caster.forcast(
         task=test_case.task,

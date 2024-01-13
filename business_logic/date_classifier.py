@@ -2,7 +2,6 @@ from business_logic.models.date import Date
 
 
 class DateClassifier:
-
     def __init__(self, today: Date):
         self._today = today
 

@@ -37,7 +37,7 @@ class BurnDownBusinessLogic:
         self._burn_down_forecaster = BurnDownForecaster(
             date_skipper=NoDateSkipper(),
             # date_skipper=WeekendSkipper(),
-            date_classifier=DateClassifier(today=Date.today())
+            date_classifier=DateClassifier(today=Date.today()),
         )
         self._task_aggregator = BurnDownForecastableTaskAggregator(id_maker=UUIDMaker())
 

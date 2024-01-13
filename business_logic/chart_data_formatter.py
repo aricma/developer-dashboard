@@ -86,7 +86,7 @@ class ChartDataFormatter:
 
     @staticmethod
     def velocity_to_chart_data_points(
-            velocity: DeveloperVelocity,
+        velocity: DeveloperVelocity,
     ) -> VelocityChartDataPoints:
         return [
             VelocityChartDataPoint(
@@ -98,6 +98,6 @@ class ChartDataFormatter:
 
     @staticmethod
     def sort_data_points_by_date(
-            data_points: VelocityChartDataPoints,
+        data_points: VelocityChartDataPoints,
     ) -> VelocityChartDataPoints:
         return sorted(data_points, key=lambda data_point: data_point.x)
