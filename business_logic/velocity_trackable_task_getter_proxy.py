@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from business_logic.interfaces.task_getter import TaskGetter
 from business_logic.models.date import Date
@@ -9,6 +9,12 @@ from business_logic.models.velocity_trackable_task import VelocityTrackableTask
 class VelocityTrackableTaskGetterProxy(TaskGetter[VelocityTrackableTask]):
     def __init__(self, task_getter: TaskGetter[Task]):
         self._task_getter = task_getter
+
+    def get_task_by_id(self, task_id: str) -> Optional[VelocityTrackableTask]:
+        task = self._task_getter.get_task_by_id(task_id)
+        if task is not None and task.date_finished is not None:
+            return self._to_velocity_trackable_task(task, task.date_finished)
+        return None
 
     def get_tasks(self) -> List[VelocityTrackableTask]:
         return [
