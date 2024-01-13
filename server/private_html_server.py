@@ -1,6 +1,6 @@
 import dataclasses
 from http.client import HTTPException
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import FastAPI
 from starlette.requests import Request
@@ -14,6 +14,7 @@ from business_logic.developer_velocity_business_logic import (
     DeveloperVelocityBusinessLogic,
 )
 from business_logic.developer_velocity_decimator import DeveloperVelocityDecimator
+from business_logic.models.burn_down_forecast import BurnDownForecast
 from business_logic.models.date import Date
 from business_logic.models.developer_velocity import DeveloperVelocity
 from business_logic.serializer.misc import Account
@@ -30,6 +31,7 @@ from server.errors import (
 from server.utils import limit_string
 from web_interface.pages.make_dashboard_burn_down_page import (
     make_dashboard_burn_down_page,
+    BurnDownPageTask,
 )
 from web_interface.pages.make_dashboard_overview_page import (
     make_dashboard_overview_page,
@@ -215,17 +217,61 @@ def _get_file_name_for_developer_velocity(
 @private_app.get("/dashboard/burn-down")
 async def get_dashboard_burn_down_page(request: Request):
     account = _unsafe_get_account_from_authentication_token_cookie(request)
-    burn_down_forcast = burn_down_business_logic.get_task_burn_down_data_for_account()
+    burn_down_forcast = burn_down_business_logic.get_total_task_burn_down_data()
     chart_data = chart_data_formatter.to_burn_down_chart_data(burn_down_forcast)
     file_name = developer_velocity_business_logic.get_file_path_for_data(
         data=dataclasses.asdict(chart_data),
         account_id=account.id,
     )
+    burn_down_tasks: List[BurnDownPageTask] = []
+    all_burn_down_forcastable_tasks = (
+        burn_down_business_logic.get_all_burn_down_forecastable_tasks()
+    )
+    for task in all_burn_down_forcastable_tasks:
+        burn_down_forecast = burn_down_business_logic.get_task_burn_down_data(
+            task_id=task.id
+        )
+        chart_data_for_task = chart_data_formatter.to_burn_down_chart_data(
+            burn_down_forecast
+        )
+        chart_data_file_name = developer_velocity_business_logic.get_file_path_for_data(
+            data=dataclasses.asdict(chart_data_for_task),
+            account_id=account.id,
+        )
+        burn_down_tasks.append(
+            BurnDownPageTask(
+                name=task.name,
+                description=task.description,
+                assignees=task.assignees,
+                story_points=task.story_points,
+                chart_data_file_name=chart_data_file_name,
+                link_to_task_detail_page=f"/{task.id}",
+                estimated_finish_date=_get_last_date_from_burn_down_forecast(
+                    burn_down_forecast
+                ),
+                link_to_original_task_page="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl?retiredLocale=de",
+            )
+        )
     return HTMLResponse(
         content=make_dashboard_burn_down_page(
-            user_name=account.name, data_file_name=file_name
+            user_name=account.name,
+            data_file_name=file_name,
+            burn_down_tasks=burn_down_tasks,
         )
     )
+
+
+def _get_last_date_from_burn_down_forecast(
+    burn_down_forecast: BurnDownForecast,
+) -> Optional[str]:
+    last_date = None
+    for each in burn_down_forecast.keys():
+        next_date = Date.from_string(each)
+        if last_date is None:
+            last_date = next_date
+        elif next_date > last_date:
+            last_date = next_date
+    return last_date.to_string()
 
 
 def _unsafe_get_account_from_authentication_token_cookie(request: Request) -> Account:
