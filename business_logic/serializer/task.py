@@ -9,6 +9,8 @@ Date = str
 
 class DeserializedTask(BaseModel):
     id: TaskID
+    title: str
+    description: str
     story_points: float
     assignees: List[DeveloperID]
     sub_tasks: List["DeserializedTask"]

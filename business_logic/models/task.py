@@ -11,6 +11,8 @@ DeveloperID = str
 @dataclasses.dataclass
 class Task:
     id: TaskID
+    name: str
+    description: str
     story_points: StoryPoints
     assignees: List[DeveloperID]
     sub_tasks: List["Task"]
