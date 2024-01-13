@@ -1,4 +1,5 @@
 import statistics
+from typing import List, Optional
 
 from business_logic.burn_down_forecastable_task_aggregator import (
     BurnDownForecastableTaskAggregator,
@@ -19,6 +20,7 @@ from business_logic.dummy_data_task_getter import DummyDataTaskGetter
 from business_logic.models.burn_down_forecast import BurnDownForecast
 from business_logic.models.date import Date
 from business_logic.models.developer_velocity import DeveloperVelocity
+from business_logic.models.task import Task
 from business_logic.uuid_maker import UUIDMaker
 
 StoryPoints = float
@@ -29,10 +31,11 @@ class BurnDownBusinessLogic:
         self._velocity_bs = DeveloperVelocityBusinessLogic(
             path_to_tasks_json_file=path_to_tasks_json_file
         )
+        self._dummy_data_task_getter = DummyDataTaskGetter(
+            path_to_dummy_data_tasks_file=path_to_tasks_json_file
+        )
         self._task_getter = BurnDownForecastableTaskGetterProxy(
-            task_getter=DummyDataTaskGetter(
-                path_to_dummy_data_tasks_file=path_to_tasks_json_file
-            )
+            task_getter=self._dummy_data_task_getter
         )
         self._burn_down_forecaster = BurnDownForecaster(
             date_skipper=NoDateSkipper(),
@@ -41,13 +44,29 @@ class BurnDownBusinessLogic:
         )
         self._task_aggregator = BurnDownForecastableTaskAggregator(id_maker=UUIDMaker())
 
-    def get_task_burn_down_data_for_account(self) -> BurnDownForecast:
+    def get_all_burn_down_forecastable_tasks(self) -> List[Task]:
+        return [
+            task
+            for task in self._dummy_data_task_getter.get_tasks()
+            if task.date_finished is None
+        ]
+
+    def get_total_task_burn_down_data(self) -> BurnDownForecast:
         tasks = self._task_getter.get_tasks()
         aggregated_task = self._task_aggregator.aggregate(tasks)
         return self._burn_down_forecaster.forcast(
             task=aggregated_task,
             developer_velocity_as_story_points_per_day=self._get_average_developer_velocity(),
         )
+
+    def get_task_burn_down_data(self, task_id: str) -> Optional[BurnDownForecast]:
+        task = self._task_getter.get_task_by_id(task_id)
+        if task is not None:
+            return self._burn_down_forecaster.forcast(
+                task=task,
+                developer_velocity_as_story_points_per_day=self._get_average_developer_velocity(),
+            )
+        return None
 
     def _get_average_developer_velocity(self) -> StoryPoints:
         return self._get_mean_developer_velocity(
