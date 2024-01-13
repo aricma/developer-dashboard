@@ -9,7 +9,10 @@ ci: refactor lint tests  # this runs locally not the actual ci
 
 dev: build server
 
-build: reset statics $(tasks_dummy_data_file_path)
+build: reset statics dummy-data
+
+.PHONY: dummy-data
+dummy-data: $(tasks_dummy_data_file_path)
 
 # ------------------------------------------------------------------------------
 
