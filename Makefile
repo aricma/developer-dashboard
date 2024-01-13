@@ -11,7 +11,8 @@ dev: build server
 
 build: reset statics dummy-data
 
-.PHONY: dummy-data
+new-dummy-data: reset-dummy-data dummy-data
+
 dummy-data: $(tasks_dummy_data_file_path)
 
 # ------------------------------------------------------------------------------
