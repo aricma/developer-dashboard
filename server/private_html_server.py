@@ -116,8 +116,8 @@ async def get_dashboard_overview_page(request: Request):
             user_name=account.name,
             # burn_down_warnings=[
             #     Alert(
-            #         title="Rising Task Burn Down Metric",
-            #         description="Attention you have a rising Task Burn Down Metric. "
+            #         title="Rising Task Burn Down Estimation",
+            #         description="Attention you have a rising Task Burn Down Estimation. "
             #                     "Make sure this happened because of changes in scope."
             #     )
             # ]

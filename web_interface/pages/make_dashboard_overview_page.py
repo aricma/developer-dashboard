@@ -44,7 +44,7 @@ def make_dashboard_overview_page(
                     ),
                     make_overview_dashboard_card_html(
                         title="Current Burn Down Overview",
-                        subtitle="An overview of the current task burn down metric.",
+                        subtitle="An overview of the current task burn down estimation.",
                         children=[
                             make_chart_html(
                                 data_file_name="./foobar-task-burn-down-metric.json",

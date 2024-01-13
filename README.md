@@ -28,7 +28,7 @@ they are often overlooked or underutilized due to a lack of proper visualization
 ## Project Intent
 
 The primary intent of this project is to empower developer teams and management with detailed,
-easy-to-understand visual representations of Developer Velocity and Burn Down metrics. By extracting
+easy-to-understand visual representations of Developer Velocity and Burn Down estimation. By extracting
 data from existing ticket systems (e.g., Jira), the tool aims to:
 
 1. Enhance transparency and understanding of individual and team performances.
@@ -69,10 +69,10 @@ data from existing ticket systems (e.g., Jira), the tool aims to:
 
 ### Data Processing
 
-- The raw data is processed to calculate Developer Velocity and Burn Down metrics.
+- The raw data is processed to calculate Developer Velocity and Burn Down estimations.
 - Developer Velocity is computed based on the amount of story points completed over specific time
   frames (day, week, month, year).
-- Burn Down metrics are calculated by tracking the completion of tasks against their estimated
+- Burn Down estimations are calculated by tracking the completion of tasks against their estimated
   timelines.
 
 ### Visualization
