@@ -8,6 +8,7 @@ from starlette.responses import HTMLResponse, FileResponse
 
 from business_logic.authentication_business_logic import AuthenticationBusinessLogic
 from business_logic.burn_down_business_logic import BurnDownBusinessLogic
+from business_logic.burn_down_forecast_decimator import BurnDownForecastDecimator
 from business_logic.chart_data_formatter import ChartDataFormatter
 from business_logic.developer_velocity_business_logic import (
     DeveloperVelocityBusinessLogic,
@@ -66,7 +67,11 @@ burn_down_business_logic = BurnDownBusinessLogic(
     path_to_tasks_json_file=str(envorinment.TASK_DUMMY_DATA_FILE_PATH)
 )
 
-chart_data_formatter = ChartDataFormatter()
+chart_data_formatter = ChartDataFormatter(
+    burn_down_forecast_decimator=BurnDownForecastDecimator(
+        max_amount_of_data_points_per_forecast=20
+    )
+)
 
 authentication_business_logic = AuthenticationBusinessLogic(
     path_to_accounts_yml_file=str(constants.PATH_TO_ACCOUNTS_YML_FILE),
