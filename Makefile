@@ -1,7 +1,6 @@
 # --- constants ----------------------------------------------------------------
 
 static_folder_name = .static
-tasks_dummy_data_file_path = ./dummy_data/tasks_dummy_data.json
 path_to_task_dummy_data = ./dummy_data
 
 # --- shortcuts ----------------------------------------------------------------
@@ -12,7 +11,7 @@ dev: build server
 
 build: reset statics dummy-data
 
-new-dummy-data: reset-dummy-data dummy-data
+new-dummy-data: dummy-data
 
 dummy-data:
 	poetry run python dummy_data/make_random_tasks.py
@@ -59,13 +58,10 @@ all-data-files: $(static_folder_name)
 
 # --- reset repo ---------------------------------------------------------------
 
-reset: reset-statics reset-dummy-data
+reset: reset-statics
 
 reset-statics:
 	rm -rf $(static_folder_name)
-
-reset-dummy-data:
-	rm -rf $(tasks_dummy_data_file_path)
 
 # --- functions ----------------------------------------------------------------
 
