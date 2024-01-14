@@ -70,12 +70,21 @@ burn_down_business_logic = BurnDownBusinessLogic(
     path_to_tasks_json_file=str(envorinment.TASK_DUMMY_DATA_FILE_PATH)
 )
 
-chart_data_formatter = ChartDataFormatter(
+detail_page_chart_data_formatter = ChartDataFormatter(
     burn_down_forecast_decimator=BurnDownForecastDecimator(
         max_amount_of_data_points_per_forecast=20
     ),
     developer_velocity_decimator=DeveloperVelocityDecimator(
         max_amount_of_data_points_per_velocity=20
+    ),
+)
+
+overview_chart_data_formatter = ChartDataFormatter(
+    burn_down_forecast_decimator=BurnDownForecastDecimator(
+        max_amount_of_data_points_per_forecast=10
+    ),
+    developer_velocity_decimator=DeveloperVelocityDecimator(
+        max_amount_of_data_points_per_velocity=10
     ),
 )
 
@@ -114,14 +123,42 @@ async def get_dashboard_overview_page(request: Request):
     return HTMLResponse(
         content=make_dashboard_overview_page(
             user_name=account.name,
-            # burn_down_warnings=[
-            #     Alert(
-            #         title="Rising Task Burn Down Estimation",
-            #         description="Attention you have a rising Task Burn Down Estimation. "
-            #                     "Make sure this happened because of changes in scope."
-            #     )
-            # ]
+            velocity_overview_chart_data_file_name=_get_velocity_overview_chart_data_file_name(
+                account=account,
+            ),
+            burn_down_overview_chart_data_file_name=_get_total_task_burn_down_data_file_name(
+                account_id=account.id,
+            ),
         )
+    )
+
+
+def _get_velocity_overview_chart_data_file_name(account: Account) -> str:
+    two_weeks_of_developer_velocity = (
+        developer_velocity_business_logic.get_developer_velocity(
+            account=account,
+            time_in_weeks=2,
+        )
+    )
+    two_weeks_of_average_developer_velocity = (
+        developer_velocity_business_logic.get_average_developer_velocity(
+            time_in_weeks=2,
+        )
+    )
+    tracking_start_date = Date.today().go_back_weeks(2)
+    chart_data = overview_chart_data_formatter.to_single_developer_velocity_chart_data(
+        developer_velocity=developer_velocity_business_logic.filter_velocity_before_given_start_date(
+            velocity=two_weeks_of_developer_velocity,
+            start_date=tracking_start_date,
+        ),
+        average_developer_velocity=developer_velocity_business_logic.filter_velocity_before_given_start_date(
+            velocity=two_weeks_of_average_developer_velocity,
+            start_date=tracking_start_date,
+        ),
+    )
+    return developer_velocity_business_logic.get_file_path_for_data(
+        data=dataclasses.asdict(chart_data),
+        account_id=account.id,
     )
 
 
@@ -198,7 +235,7 @@ def _get_file_name_for_developer_velocity(
     account_id: str,
     tracking_start_date: Date,
 ) -> str:
-    chart_data = chart_data_formatter.to_single_developer_velocity_chart_data(
+    chart_data = detail_page_chart_data_formatter.to_single_developer_velocity_chart_data(
         developer_velocity=developer_velocity_business_logic.filter_velocity_before_given_start_date(
             velocity=developer_velocity,
             start_date=tracking_start_date,
@@ -217,10 +254,7 @@ def _get_file_name_for_developer_velocity(
 @private_app.get("/dashboard/burn-down")
 async def get_dashboard_burn_down_page(request: Request):
     account = _unsafe_get_account_from_authentication_token_cookie(request)
-    burn_down_forcast = burn_down_business_logic.get_total_task_burn_down_data()
-    chart_data = chart_data_formatter.to_burn_down_chart_data(burn_down_forcast)
-    file_name = developer_velocity_business_logic.get_file_path_for_data(
-        data=dataclasses.asdict(chart_data),
+    file_name = _get_total_task_burn_down_data_file_name(
         account_id=account.id,
     )
     burn_down_tasks: List[BurnDownPageTask] = []
@@ -233,7 +267,7 @@ async def get_dashboard_burn_down_page(request: Request):
         )
         if burn_down_forecast is None:
             raise TaskNotFound(task_id=task.id)
-        chart_data_for_task = chart_data_formatter.to_burn_down_chart_data(
+        chart_data_for_task = detail_page_chart_data_formatter.to_burn_down_chart_data(
             burn_down_forecast
         )
         chart_data_file_name = developer_velocity_business_logic.get_file_path_for_data(
@@ -265,6 +299,17 @@ async def get_dashboard_burn_down_page(request: Request):
             data_file_name=file_name,
             burn_down_tasks=burn_down_tasks,
         )
+    )
+
+
+def _get_total_task_burn_down_data_file_name(account_id: str) -> str:
+    burn_down_forcast = burn_down_business_logic.get_total_task_burn_down_data()
+    chart_data = detail_page_chart_data_formatter.to_burn_down_chart_data(
+        burn_down_forcast
+    )
+    return developer_velocity_business_logic.get_file_path_for_data(
+        data=dataclasses.asdict(chart_data),
+        account_id=account_id,
     )
 
 

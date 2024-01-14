@@ -19,6 +19,8 @@ from web_interface.private.utils import (
 
 def make_dashboard_overview_page(
     user_name: str,
+    velocity_overview_chart_data_file_name: str,
+    burn_down_overview_chart_data_file_name: str,
     velocity_warnings: Optional[List[Alert]] = None,
     burn_down_warnings: Optional[List[Alert]] = None,
 ) -> str:
@@ -34,7 +36,7 @@ def make_dashboard_overview_page(
                         subtitle="An overview of the current developer velocity.",
                         children=[
                             make_chart_html(
-                                data_file_name="./foobar-developer-velocity.json",
+                                data_file_name=velocity_overview_chart_data_file_name,
                                 chart_type="velocity",
                             ),
                             make_warnings(warnings=velocity_warnings or []),
@@ -48,7 +50,7 @@ def make_dashboard_overview_page(
                         subtitle="An overview of the current task burn down estimation.",
                         children=[
                             make_chart_html(
-                                data_file_name="./foobar-task-burn-down-metric.json",
+                                data_file_name=burn_down_overview_chart_data_file_name,
                                 chart_type="burn-down",
                             ),
                             make_warnings(warnings=burn_down_warnings or []),
