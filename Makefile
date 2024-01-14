@@ -14,7 +14,8 @@ build: reset statics dummy-data
 
 new-dummy-data: reset-dummy-data dummy-data
 
-dummy-data: $(tasks_dummy_data_file_path)
+dummy-data:
+	poetry run python dummy_data/make_random_tasks.py
 
 # ------------------------------------------------------------------------------
 
@@ -36,9 +37,6 @@ server:
 	STATIC_FOLDER_NAME=$(static_folder_name) \
 	PATH_TO_TASK_DUMMY_DATA=$(path_to_task_dummy_data) \
 	poetry run uvicorn server.__main__:app --reload
-
-$(tasks_dummy_data_file_path):
-	poetry run python dummy_data/make_random_tasks.py > $(tasks_dummy_data_file_path)
 
 # --- make static web interface html, css and js files -------------------------
 

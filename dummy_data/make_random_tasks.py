@@ -1,15 +1,18 @@
 import dataclasses
+import hashlib
 import json
 import random
 from dataclasses import asdict
+from pathlib import Path
 from typing import List, Optional, TypeVar
 from uuid import uuid4 as uuid
 from dateutil.parser import parse as to_date
 from datetime import timedelta as duration, datetime
 import faker
 
+PATH_TO_DUMMY_DATA = Path(__file__).parent
 NUMBER_OF_CREATED_TASKS = 8 * 5  # 8 weeks x 1 per work day
-INITIAL_SUB_TASKS = 12
+INITIAL_SUB_TASKS = 2
 ABSOLUTE_START_DATE = str(datetime(year=2023, month=8, day=1))
 ABSOLUTE_END_DATE = str(datetime.now())
 
@@ -229,5 +232,16 @@ def make_random_tasks():
     }
 
 
+def _get_finger_print_for_file_content(file_content: str) -> str:
+    return str(hashlib.md5(file_content.encode("utf-8")).hexdigest())
+
+
+def _write_data_to_file(data: str) -> None:
+    file_name = _get_finger_print_for_file_content(file_content=data)
+    with open(PATH_TO_DUMMY_DATA / (file_name + ".json"), "w") as writer:
+        writer.write(data)
+
+
 if __name__ == "__main__":
-    print(json.dumps(make_random_tasks(), indent=4, sort_keys=True))
+    formatted_file_content = json.dumps(make_random_tasks(), indent=4, sort_keys=True)
+    _write_data_to_file(formatted_file_content)
