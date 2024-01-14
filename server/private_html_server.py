@@ -63,11 +63,11 @@ async def server_error_exception_handler(_, exc: HTTPException):
 
 
 developer_velocity_business_logic = DeveloperVelocityBusinessLogic(
-    path_to_tasks_json_file=str(envorinment.TASK_DUMMY_DATA_FILE_PATH)
+    path_to_dummy_data=str(envorinment.PATH_TO_TASK_DUMMY_DATA)
 )
 
 burn_down_business_logic = BurnDownBusinessLogic(
-    path_to_tasks_json_file=str(envorinment.TASK_DUMMY_DATA_FILE_PATH)
+    path_to_dummy_data=str(envorinment.PATH_TO_TASK_DUMMY_DATA)
 )
 
 detail_page_chart_data_formatter = ChartDataFormatter(

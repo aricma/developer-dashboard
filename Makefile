@@ -2,6 +2,7 @@
 
 static_folder_name = .static
 tasks_dummy_data_file_path = ./dummy_data/tasks_dummy_data.json
+path_to_task_dummy_data = ./dummy_data
 
 # --- shortcuts ----------------------------------------------------------------
 
@@ -33,7 +34,7 @@ tests:
 .PHONY: server
 server:
 	STATIC_FOLDER_NAME=$(static_folder_name) \
-	TASK_DUMMY_DATA_FILE_PATH=$(tasks_dummy_data_file_path) \
+	PATH_TO_TASK_DUMMY_DATA=$(path_to_task_dummy_data) \
 	poetry run uvicorn server.__main__:app --reload
 
 $(tasks_dummy_data_file_path):

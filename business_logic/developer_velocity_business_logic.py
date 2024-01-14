@@ -16,11 +16,9 @@ from server.constants import PATH_TO_STATIC_FILES
 
 
 class DeveloperVelocityBusinessLogic:
-    def __init__(self, path_to_tasks_json_file: str):
+    def __init__(self, path_to_dummy_data: str):
         self._task_getter = VelocityTrackableTaskGetterProxy(
-            task_getter=DummyDataTaskGetter(
-                path_to_dummy_data_tasks_file=path_to_tasks_json_file
-            )
+            task_getter=DummyDataTaskGetter(path_to_dummy_data=path_to_dummy_data)
         )
         self._velocity_tracker = DeveloperVelocityTracker()
 

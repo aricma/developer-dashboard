@@ -27,12 +27,12 @@ StoryPoints = float
 
 
 class BurnDownBusinessLogic:
-    def __init__(self, path_to_tasks_json_file: str):
+    def __init__(self, path_to_dummy_data: str):
         self._velocity_bs = DeveloperVelocityBusinessLogic(
-            path_to_tasks_json_file=path_to_tasks_json_file
+            path_to_dummy_data=path_to_dummy_data
         )
         self._dummy_data_task_getter = DummyDataTaskGetter(
-            path_to_dummy_data_tasks_file=path_to_tasks_json_file
+            path_to_dummy_data=path_to_dummy_data
         )
         self._task_getter = BurnDownForecastableTaskGetterProxy(
             task_getter=self._dummy_data_task_getter

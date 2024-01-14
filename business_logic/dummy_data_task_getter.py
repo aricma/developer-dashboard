@@ -1,3 +1,4 @@
+import glob
 import json
 from pathlib import Path
 from typing import List, Optional, Dict
@@ -12,25 +13,29 @@ from business_logic.serializer.dummy_data_file_de_serializer import (
 from business_logic.serializer.task import DeserializedTask
 
 TaskID = str
+FileName = str
 
 
 class DummyDataTaskGetter(TaskGetter[Task]):
     def __init__(
         self,
-        path_to_dummy_data_tasks_file: str,
+        path_to_dummy_data: str,
     ):
-        self._path_to_dummy_data_tasks = path_to_dummy_data_tasks_file
+        self._path_to_dummy_data = path_to_dummy_data
 
     def get_task_by_id(self, task_id: str) -> Optional[Task]:
         return self._normalize_tasks(tasks=self.get_tasks()).get(task_id)
 
-    @staticmethod
-    def _normalize_tasks(tasks: List[Task]) -> Dict[TaskID, Task]:
-        return {task.id: task for task in tasks}
-
     def get_tasks(self) -> List[Task]:
-        deserialized_dummy_data_file = self._read_dummy_data()
-        return self._to_tasks(deserialized_dummy_data_file.tasks)
+        all_file_names = self._get_all_dummy_data_file_names()
+        all_deserialized_dummy_data_files = self._read_all_dummy_data(
+            file_names=all_file_names
+        )
+        result: List[Task] = []
+        for deserialized_dummy_data_file in all_deserialized_dummy_data_files:
+            for deserialized_task in deserialized_dummy_data_file.tasks:
+                result.append(self._to_task(deserialized_task))
+        return result
 
     def _to_tasks(self, deserialized_tasks: List[DeserializedTask]) -> List[Task]:
         return [
@@ -53,13 +58,22 @@ class DummyDataTaskGetter(TaskGetter[Task]):
             ),
         )
 
-    def _read_dummy_data(self) -> DeserializedDummyTasksFile:
-        file_path_to_dummy_data = Path(self._path_to_dummy_data_tasks)
-        if file_path_to_dummy_data.exists() and file_path_to_dummy_data.is_file():
-            return DeserializedDummyTasksFile(
-                **self._read_json_file_content(file_path_to_dummy_data)
-            )
+    def _read_all_dummy_data(
+        self, file_names: List[str]
+    ) -> List[DeserializedDummyTasksFile]:
+        return [self._read_dummy_data(Path(file_name)) for file_name in file_names]
+
+    def _read_dummy_data(self, file: Path) -> DeserializedDummyTasksFile:
+        if file.exists() and file.is_file():
+            return DeserializedDummyTasksFile(**self._read_json_file_content(file))
         raise DummyDataNotFoundError()
+
+    def _get_all_dummy_data_file_names(self) -> List[str]:
+        return glob.glob(self._path_to_dummy_data + "/*.json")
+
+    @staticmethod
+    def _normalize_tasks(tasks: List[Task]) -> Dict[TaskID, Task]:
+        return {task.id: task for task in tasks}
 
     @staticmethod
     def _read_json_file_content(value: Path) -> dict:
