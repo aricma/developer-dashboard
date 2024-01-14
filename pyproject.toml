@@ -12,7 +12,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ["<=3.11", ">=3.8"]
 jira = { extras = ["cli"], version = "^3.5.2" }
 humanize = "^4.9.0"
 fastapi = "^0.105.0"
