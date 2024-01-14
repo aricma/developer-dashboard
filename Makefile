@@ -11,7 +11,7 @@ dev: build server
 
 build: reset statics dummy-data
 
-new-dummy-data: dummy-data
+# --- dummy data ---------------------------------------------------------------
 
 dummy-data:
 	poetry run python dummy_data/make_random_tasks.py
