@@ -5,7 +5,7 @@ path_to_task_dummy_data = ./dummy_data
 
 # --- shortcuts ----------------------------------------------------------------
 
-ci: refactor lint tests  # this runs locally not the actual ci
+ci: local-ci
 
 dev: build server
 
@@ -16,7 +16,9 @@ new-dummy-data: dummy-data
 dummy-data:
 	poetry run python dummy_data/make_random_tasks.py
 
-# ------------------------------------------------------------------------------
+# --- CI -----------------------------------------------------------------------
+
+local-ci: refactor lint tests
 
 refactor:
 	poetry run black .
