@@ -57,22 +57,24 @@ class BurnDownBusinessLogic:
             developer_velocity_as_story_points_per_day=self._get_average_developer_velocity(),
         )
 
-    def get_task_burn_down_data(self, task_id: str) -> Optional[BurnDownForecast]:
+    def get_task_burn_down_data(
+        self, task_id: str, developer_velocity_as_story_points_per_day: float
+    ) -> Optional[BurnDownForecast]:
         task = self._task_getter.get_task_by_id(task_id)
         if task is not None:
             return self._burn_down_forecaster.forcast(
                 task=task,
-                developer_velocity_as_story_points_per_day=self._get_average_developer_velocity(),
+                developer_velocity_as_story_points_per_day=developer_velocity_as_story_points_per_day,
             )
         return None
 
     def _get_average_developer_velocity(self) -> StoryPoints:
-        return self._get_mean_developer_velocity(
+        return self._get_median_developer_velocity(
             developer_velocity=self._velocity_bs.get_average_developer_velocity(
                 time_in_weeks=8
             )
         )
 
     @staticmethod
-    def _get_mean_developer_velocity(developer_velocity: DeveloperVelocity) -> float:
+    def _get_median_developer_velocity(developer_velocity: DeveloperVelocity) -> float:
         return statistics.median(developer_velocity.values())

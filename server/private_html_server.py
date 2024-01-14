@@ -1,4 +1,5 @@
 import dataclasses
+import statistics
 from http.client import HTTPException
 from typing import Optional, List
 
@@ -289,9 +290,17 @@ async def get_dashboard_burn_down_page(request: Request):
     all_burn_down_forcastable_tasks = (
         burn_down_business_logic.get_all_burn_down_forecastable_tasks()
     )
+    median_developer_velocity_of_the_average_developer_for_the_last_eight_weeks: float = statistics.median(
+        developer_velocity_business_logic.get_average_developer_velocity(
+            time_in_weeks=8
+        ).values()
+    )
     for task in all_burn_down_forcastable_tasks:
         burn_down_forecast = burn_down_business_logic.get_task_burn_down_data(
-            task_id=task.id
+            task_id=task.id,
+            developer_velocity_as_story_points_per_day=(
+                median_developer_velocity_of_the_average_developer_for_the_last_eight_weeks
+            ),
         )
         if burn_down_forecast is None:
             raise TaskNotFound(task_id=task.id)
