@@ -3,23 +3,18 @@ from pathlib import Path
 from typing import Union, List
 
 from business_logic.developer_velocity_tracker import DeveloperVelocityTracker
+from business_logic.interfaces.task_getter import TaskGetter
 from business_logic.models.date import Date
 from business_logic.models.developer_velocity import DeveloperVelocity
-from business_logic.dummy_data_task_getter import DummyDataTaskGetter
 from business_logic.models.velocity_trackable_task import VelocityTrackableTask
 from business_logic.serializer.misc import Account
 from business_logic.utils import hash_string_value
-from business_logic.velocity_trackable_task_getter_proxy import (
-    VelocityTrackableTaskGetterProxy,
-)
 from server.constants import PATH_TO_STATIC_FILES
 
 
 class DeveloperVelocityBusinessLogic:
-    def __init__(self, path_to_dummy_data: str):
-        self._task_getter = VelocityTrackableTaskGetterProxy(
-            task_getter=DummyDataTaskGetter(path_to_dummy_data=path_to_dummy_data)
-        )
+    def __init__(self, task_getter: TaskGetter[VelocityTrackableTask]):
+        self._task_getter = task_getter
         self._velocity_tracker = DeveloperVelocityTracker()
 
     def get_developer_velocity(

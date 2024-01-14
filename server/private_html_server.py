@@ -9,15 +9,23 @@ from starlette.responses import HTMLResponse, FileResponse
 from business_logic.authentication_business_logic import AuthenticationBusinessLogic
 from business_logic.burn_down_business_logic import BurnDownBusinessLogic
 from business_logic.burn_down_forecast_decimator import BurnDownForecastDecimator
+from business_logic.burn_down_forecastable_task_getter_proxy import (
+    BurnDownForecastableTaskGetterProxy,
+)
+from business_logic.caching_task_getter import CachingTaskGetter
 from business_logic.chart_data_formatter import ChartDataFormatter
 from business_logic.developer_velocity_business_logic import (
     DeveloperVelocityBusinessLogic,
 )
 from business_logic.developer_velocity_decimator import DeveloperVelocityDecimator
+from business_logic.dummy_data_task_getter import DummyDataFileTaskGetter
 from business_logic.models.burn_down_forecast import BurnDownForecast
 from business_logic.models.date import Date
 from business_logic.models.developer_velocity import DeveloperVelocity
 from business_logic.serializer.misc import Account
+from business_logic.velocity_trackable_task_getter_proxy import (
+    VelocityTrackableTaskGetterProxy,
+)
 from server import constants
 from server.authentication_utils import (
     create_authentication_token_cookie_value,
@@ -62,12 +70,32 @@ async def server_error_exception_handler(_, exc: HTTPException):
         )
 
 
-developer_velocity_business_logic = DeveloperVelocityBusinessLogic(
+dummy_data_file_task_getter = DummyDataFileTaskGetter(
     path_to_dummy_data=str(envorinment.PATH_TO_TASK_DUMMY_DATA)
+)
+velocity_trackable_task_getter = VelocityTrackableTaskGetterProxy(
+    task_getter=dummy_data_file_task_getter
+)
+caching_velocity_trackable_task_getter = CachingTaskGetter(
+    task_getter=velocity_trackable_task_getter,
+    cache_life_time_in_seconds=30,
+)
+developer_velocity_business_logic = DeveloperVelocityBusinessLogic(
+    task_getter=caching_velocity_trackable_task_getter
+)
+
+burn_down_forecastable_task_getter = BurnDownForecastableTaskGetterProxy(
+    task_getter=dummy_data_file_task_getter
+)
+caching_burn_down_forecastable_task_getter = CachingTaskGetter(
+    task_getter=burn_down_forecastable_task_getter,
+    cache_life_time_in_seconds=30,
 )
 
 burn_down_business_logic = BurnDownBusinessLogic(
-    path_to_dummy_data=str(envorinment.PATH_TO_TASK_DUMMY_DATA)
+    dummy_data_file_task_getter=dummy_data_file_task_getter,
+    developer_velocity_business_logic=developer_velocity_business_logic,
+    burn_down_forecastable_task_getter=caching_burn_down_forecastable_task_getter,
 )
 
 detail_page_chart_data_formatter = ChartDataFormatter(
