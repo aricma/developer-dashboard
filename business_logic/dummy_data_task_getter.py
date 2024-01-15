@@ -40,8 +40,8 @@ class DummyDataFileTaskGetter(TaskGetter[Task]):
     _normalized_parsed_tasks: Dict[TaskID, NormalizedTask]
 
     def __init__(
-        self,
-        path_to_dummy_data: str,
+            self,
+            path_to_dummy_data: str,
     ):
         self._path_to_dummy_data = path_to_dummy_data
         self._files_read = set()
@@ -89,7 +89,7 @@ class DummyDataFileTaskGetter(TaskGetter[Task]):
         return result
 
     def _read_all_dummy_data(
-        self, file_names: List[str]
+            self, file_names: List[str]
     ) -> List[DeserializedDummyTasksFile]:
         result: List[DeserializedDummyTasksFile] = []
         for file_name in file_names:
@@ -98,9 +98,12 @@ class DummyDataFileTaskGetter(TaskGetter[Task]):
                 self._files_read.add(file_name)
         return result
 
-    def _read_dummy_data(self, file: Path) -> DeserializedDummyTasksFile:
+    @staticmethod
+    def _read_dummy_data(file: Path) -> DeserializedDummyTasksFile:
         if file.exists() and file.is_file():
-            return DeserializedDummyTasksFile(**self._read_json_file_content(file))
+            with open(file, "r") as reader:
+                file_content = reader.read()
+                return DeserializedDummyTasksFile(**json.loads(file_content))
         raise DummyDataNotFoundError()
 
     def _get_all_dummy_data_file_names(self) -> List[str]:
@@ -134,8 +137,3 @@ class DummyDataFileTaskGetter(TaskGetter[Task]):
             date_started=normalized_task.date_started,
             date_finished=normalized_task.date_finished,
         )
-
-    @staticmethod
-    def _read_json_file_content(value: Path) -> dict:
-        with open(value, "r") as reader:
-            return json.loads(reader.read())
