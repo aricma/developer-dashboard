@@ -23,10 +23,10 @@ class AccountAlreadyExistsError(KeyError, ServerError):
 
 
 class InvalidCredentialsError(ValueError, ServerError):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Given email and password are invalid.")
 
 
 class DummyDataNotFoundError(FileNotFoundError, ServerError):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Velocity Dummy Data is not created.")
