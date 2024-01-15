@@ -25,9 +25,9 @@ refactor:
 
 lint:
 	poetry run ruff check
-	poetry run mypy business_logic
-	poetry run mypy web_interface
-	poetry run mypy server
+	poetry run mypy --strict business_logic
+	poetry run mypy --strict web_interface
+	poetry run mypy --strict server
 
 tests:
 	poetry run pytest business_logic --noconftest
