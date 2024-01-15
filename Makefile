@@ -21,7 +21,6 @@ dummy-data:
 local-ci: refactor lint tests
 
 refactor:
-	poetry run black .
 	poetry run ruff --fix
 
 lint:
