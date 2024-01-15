@@ -14,7 +14,7 @@ from business_logic.burn_down_forecastable_task_getter_proxy import (
     BurnDownForecastableTaskGetterProxy,
 )
 from business_logic.caching_task_getter import CachingTaskGetter
-from business_logic.chart_data_formatter import ChartDataFormatter
+from server.chart_data_formatter import ChartDataFormatter
 from business_logic.developer_velocity_business_logic import (
     DeveloperVelocityBusinessLogic,
 )
