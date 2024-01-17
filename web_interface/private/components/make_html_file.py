@@ -1,8 +1,8 @@
 from web_interface.private.utils import (
-    HTMLElement,
     resolve_html_element,
     make_html_template,
 )
+from web_interface.private.types import HTMLElement
 
 
 def make_html_file(

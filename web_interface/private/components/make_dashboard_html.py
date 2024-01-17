@@ -4,7 +4,8 @@ from web_interface.private.features.make_dashboard_detail_header_html import (
 from web_interface.private.features.make_dashboard_main_menu_item_html import (
     make_dashboard_main_menu_item_html,
 )
-from web_interface.private.utils import HTMLElement, make_html_template
+from web_interface.private.utils import make_html_template
+from web_interface.private.types import HTMLElement
 
 
 def make_dashboard_html(

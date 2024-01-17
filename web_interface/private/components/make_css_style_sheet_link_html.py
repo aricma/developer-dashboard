@@ -1,5 +1,6 @@
 from web_interface.private.constants import PATH_TO_HTML_TEMPLATES
-from web_interface.private.utils import HTMLElement, make_html_element_from_file
+from web_interface.private.utils import make_html_element_from_file
+from web_interface.private.types import HTMLElement
 
 
 def make_css_style_sheet_link_html(file_name: str) -> HTMLElement:

@@ -13,8 +13,8 @@ from web_interface.private.features.make_overview_dashboard_card_html import (
 from web_interface.private.utils import (
     read_text_file,
     join_html,
-    HTMLElement,
 )
+from web_interface.private.types import HTMLElement
 
 
 def make_dashboard_overview_page(

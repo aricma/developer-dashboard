@@ -4,10 +4,10 @@ from web_interface.private.constants import PATH_TO_HTML_TEMPLATES
 from web_interface.private.models import Alignment
 from web_interface.private.utils import (
     make_html_element_from_file,
-    HTMLElement,
     resolve_html_element,
     make_html_template,
 )
+from web_interface.private.types import HTMLElement
 
 
 def make_flex_box_center_html(

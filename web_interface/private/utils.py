@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
-from typing import Dict, List, Union, Optional, Literal
+from typing import List, Union, Optional, Literal
 from uuid import uuid4
 from bs4 import BeautifulSoup
 from bs4.formatter import HTMLFormatter
 
 from web_interface.private.constants import PATH_TO_HTML_TEMPLATES, PATH_TO_TEXT_FILES
-from web_interface.private.types import SkipMissingDict, KeepMissingDict
+from web_interface.private.types import SkipMissingDict, KeepMissingDict, HTMLElement, Props
 
 
 def print_html(html: str) -> None:
@@ -23,14 +23,8 @@ def print_html(html: str) -> None:
     )
 
 
-HTMLElement = Union[List["HTMLElement"], str, None]
-
-
 def make_uuid():
     return str(uuid4())
-
-
-Props = Dict[str, HTMLElement]
 
 
 def make_html_template(template_name: str, props: Optional[Props] = None) -> str:

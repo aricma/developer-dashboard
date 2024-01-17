@@ -1,4 +1,5 @@
-from web_interface.private.utils import HTMLElement, make_html_template
+from web_interface.private.utils import make_html_template
+from web_interface.private.types import HTMLElement
 
 
 def make_tabs_content_html(children: HTMLElement) -> str:

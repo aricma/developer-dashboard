@@ -5,7 +5,8 @@ from web_interface.private.constants import PATH_TO_HTML_TEMPLATES
 from web_interface.private.features.make_sign_out_button_html import (
     make_sign_out_button_html,
 )
-from web_interface.private.utils import make_html_element_from_file, HTMLElement
+from web_interface.private.utils import make_html_element_from_file
+from web_interface.private.types import HTMLElement
 
 
 def make_main_navigation_html(
