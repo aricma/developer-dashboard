@@ -1,8 +1,4 @@
 import hashlib
-from pathlib import Path
-from typing import Union
-
-from yaml import load, Loader
 
 
 def print_api_title() -> None:
@@ -27,8 +23,3 @@ def print_api_title() -> None:
 
 def hash_string_value(value: str) -> str:
     return str(hashlib.md5(value.encode("utf-8")).hexdigest())
-
-
-def read_yml_file_content(path: Union[Path, str]) -> dict:
-    with open(path, "r") as reader:
-        return load(reader.read(), Loader=Loader)

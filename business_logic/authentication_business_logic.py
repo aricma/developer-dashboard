@@ -1,10 +1,10 @@
 from pathlib import Path
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Union
 
 import jwt
-from yaml import dump, Dumper
+from yaml import dump, Dumper, load, Loader
 
-from business_logic.utils import hash_string_value, read_yml_file_content
+from business_logic.utils import hash_string_value
 from business_logic.errors import InvalidCredentialsError, AccountAlreadyExistsError
 from business_logic.serializer.misc import Account, AccountInfo, Configuration
 from server.errors import MissingAccountForAuthenticationToken
@@ -65,8 +65,7 @@ class AuthenticationBusinessLogic:
     def _get_accounts_from_file(self) -> Dict[str, Account]:
         file_path = Path(self._path_to_accounts_yml_file)
         if file_path.is_file():
-            file_content = read_yml_file_content(file_path)
-            configuration = Configuration(**file_content)
+            configuration = _read_configuration(path=file_path)
         else:
             configuration = Configuration(**{"accounts": {}})
 
@@ -84,8 +83,7 @@ class AuthenticationBusinessLogic:
     def _unsafe_store_accounts(self, accounts: List[Account]) -> None:
         file_path = Path(self._path_to_accounts_yml_file)
         if file_path.is_file():
-            file_content = read_yml_file_content(file_path)
-            configuration = Configuration(**file_content)
+            configuration = _read_configuration(path=file_path)
         else:
             configuration = Configuration(**{"accounts": {}})
 
@@ -118,3 +116,13 @@ class AuthenticationBusinessLogic:
             key=JWT_KEY,
             algorithm=JWT_ALGORITHM,
         )
+
+
+LoadedYamlFileValue = Union[Dict[str, "LoadedYamlFileValue"], List["LoadedYamlFileValue"], str, int, float, bool]
+
+
+def _read_configuration(path: Union[Path, str]) -> Configuration:
+    with open(path, "r") as reader:
+        file_content = reader.read()
+        parsed_file_content = load(file_content, Loader=Loader)
+    return Configuration(**parsed_file_content)
