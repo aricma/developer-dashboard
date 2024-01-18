@@ -44,7 +44,7 @@ class AuthenticationBusinessLogic:
         return None
 
     def validate_password_against_account(
-        self, account: Account, password: str
+            self, account: Account, password: str
     ) -> bool:
         return account.hashed_password == self._hash_password(password)
 

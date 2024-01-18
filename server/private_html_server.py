@@ -66,7 +66,7 @@ async def server_error_exception_handler(_: Request, exc: HTTPException) -> Resp
             content=make_error_page(
                 error_code="500",
                 message=f'There was an unknown error raised by the server: "{error_message}". '
-                "Please create a ticket at https://github.com/aricma/developer-dashboard.",
+                        "Please create a ticket at https://github.com/aricma/developer-dashboard.",
             )
         )
 
@@ -145,7 +145,7 @@ async def check_for_authentication_cookie(
         constants.AUTHENTICATION_TOKEN_COOKIE_NAME
     )
     if optional_authentication_token is not None and authentication_token_is_valid(
-        token=optional_authentication_token
+            token=optional_authentication_token
     ):
         response = await call_next(request)
         try:
@@ -276,10 +276,10 @@ async def get_dashboard_velocity_page(request: Request) -> HTMLResponse:
 
 
 def _get_file_name_for_developer_velocity(
-    developer_velocity: DeveloperVelocity,
-    average_developer_velocity: DeveloperVelocity,
-    account_id: str,
-    tracking_start_date: Date,
+        developer_velocity: DeveloperVelocity,
+        average_developer_velocity: DeveloperVelocity,
+        account_id: str,
+        tracking_start_date: Date,
 ) -> str:
     chart_data = detail_page_chart_data_formatter.to_single_developer_velocity_chart_data(
         developer_velocity=developer_velocity_business_logic.filter_velocity_before_given_start_date(
@@ -373,7 +373,7 @@ class TaskNotFound(ValueError, HTTPException):
 
 
 def _get_last_date_from_burn_down_forecast(
-    burn_down_forecast: BurnDownForecast,
+        burn_down_forecast: BurnDownForecast,
 ) -> Optional[str]:
     last_date = None
     for each in burn_down_forecast.keys():

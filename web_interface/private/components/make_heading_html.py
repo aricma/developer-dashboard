@@ -13,7 +13,6 @@ Heading = Union[
     Literal["h6"],
 ]
 
-
 heading_to_classes_map = {
     "h1": "mb-4",
     "h2": "mb-3",
@@ -33,7 +32,7 @@ alignment_to_classes_map = SkipMissingDict(
 
 
 def make_heading_html(
-    title: str, heading: Heading = "h2", alignment: Alignment = "start"
+        title: str, heading: Heading = "h2", alignment: Alignment = "start"
 ) -> str:
     return make_html_template(
         template_name="heading",
