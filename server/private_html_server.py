@@ -13,7 +13,7 @@ from business_logic.burn_down_forecast_decimator import BurnDownForecastDecimato
 from business_logic.burn_down_forecastable_task_getter_proxy import (
     BurnDownForecastableTaskGetterProxy,
 )
-from business_logic.caching_task_getter import CachingTaskGetter
+from business_logic.caching_task_getter import CachingTaskGetter, TaskCache, CacheUtils, TasksCache
 from server.chart_data_formatter import ChartDataFormatter
 from business_logic.developer_velocity_business_logic import (
     DeveloperVelocityBusinessLogic,
@@ -79,6 +79,14 @@ velocity_trackable_task_getter = VelocityTrackableTaskGetterProxy(
 )
 caching_velocity_trackable_task_getter = CachingTaskGetter(
     task_getter=velocity_trackable_task_getter,
+    task_cache=TaskCache(
+        cache_utils=CacheUtils(),
+        cache_life_time_in_seconds=30,
+    ),
+    tasks_cache=TasksCache(
+        cache_utils=CacheUtils(),
+        cache_life_time_in_seconds=45,
+    )
 )
 developer_velocity_business_logic = DeveloperVelocityBusinessLogic(
     task_getter=caching_velocity_trackable_task_getter
@@ -89,6 +97,14 @@ burn_down_forecastable_task_getter = BurnDownForecastableTaskGetterProxy(
 )
 caching_burn_down_forecastable_task_getter = CachingTaskGetter(
     task_getter=burn_down_forecastable_task_getter,
+    task_cache=TaskCache(
+        cache_utils=CacheUtils(),
+        cache_life_time_in_seconds=30,
+    ),
+    tasks_cache=TasksCache(
+        cache_utils=CacheUtils(),
+        cache_life_time_in_seconds=45,
+    )
 )
 
 burn_down_business_logic = BurnDownBusinessLogic(
