@@ -122,10 +122,8 @@ class CachingTaskGetter(TaskGetter[T]):
             task_getter: TaskGetter[T],
             task_cache: Cache[TaskID, T],
             tasks_cache: Cache[Literal["GET_TASKS"], List[T]],
-            cache_life_time_in_seconds: int
     ):
         self._task_getter = task_getter
-        self._cache_life_time_in_seconds = cache_life_time_in_seconds
         self._tasks_cache = tasks_cache
         self._task_cache = task_cache
 

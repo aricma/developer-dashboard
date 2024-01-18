@@ -79,7 +79,6 @@ velocity_trackable_task_getter = VelocityTrackableTaskGetterProxy(
 )
 caching_velocity_trackable_task_getter = CachingTaskGetter(
     task_getter=velocity_trackable_task_getter,
-    cache_life_time_in_seconds=30,
 )
 developer_velocity_business_logic = DeveloperVelocityBusinessLogic(
     task_getter=caching_velocity_trackable_task_getter
@@ -90,7 +89,6 @@ burn_down_forecastable_task_getter = BurnDownForecastableTaskGetterProxy(
 )
 caching_burn_down_forecastable_task_getter = CachingTaskGetter(
     task_getter=burn_down_forecastable_task_getter,
-    cache_life_time_in_seconds=30,
 )
 
 burn_down_business_logic = BurnDownBusinessLogic(
