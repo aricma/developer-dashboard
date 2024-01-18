@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Union, List
+from typing import List
 
 from business_logic.developer_velocity_tracker import DeveloperVelocityTracker
 from business_logic.interfaces.task_getter import TaskGetter
@@ -37,7 +37,7 @@ class DeveloperVelocityBusinessLogic:
             start_date=tracking_start_date,
         )
 
-    def get_file_path_for_data(self, data: dict, account_id: str) -> str:
+    def get_file_path_for_data(self, data: object, account_id: str) -> str:
         formatted_data = self._pretty_format_json(data)
         file_name = self._make_velocity_data_file_name_for_developer(
             developer_id=account_id, data_finger_print=hash_string_value(formatted_data)
@@ -63,7 +63,7 @@ class DeveloperVelocityBusinessLogic:
         }
 
     @staticmethod
-    def _pretty_format_json(value: Union[dict, list]) -> str:
+    def _pretty_format_json(value: object) -> str:
         return json.dumps(value, indent=4, sort_keys=True)
 
     @staticmethod

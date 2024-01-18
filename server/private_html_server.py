@@ -1,11 +1,11 @@
 import dataclasses
 import statistics
 from http.client import HTTPException
-from typing import Optional, List
+from typing import Optional, List, Callable, Awaitable
 
 from fastapi import FastAPI
 from starlette.requests import Request
-from starlette.responses import HTMLResponse, FileResponse
+from starlette.responses import HTMLResponse, FileResponse, Response
 
 from business_logic.authentication_business_logic import AuthenticationBusinessLogic
 from business_logic.burn_down_business_logic import BurnDownBusinessLogic
@@ -57,7 +57,7 @@ private_app = FastAPI(
 
 
 @private_app.exception_handler(HTTPException)
-async def server_error_exception_handler(_, exc: HTTPException):
+async def server_error_exception_handler(_: Request, exc: HTTPException) -> Response:
     if isinstance(exc, MissingAuthenticationTokenCookie):
         return redirect_to_login_page()
     else:
@@ -121,7 +121,10 @@ authentication_business_logic = AuthenticationBusinessLogic(
 
 
 @private_app.middleware("http")
-async def check_for_authentication_cookie(request: Request, call_next):
+async def check_for_authentication_cookie(
+        request: Request,
+        call_next: Callable[[Request], Awaitable[Response]]
+) -> Response:
     optional_authentication_token = request.cookies.get(
         constants.AUTHENTICATION_TOKEN_COOKIE_NAME
     )
@@ -145,7 +148,7 @@ async def check_for_authentication_cookie(request: Request, call_next):
 
 
 @private_app.get("/dashboard/overview")
-async def get_dashboard_overview_page(request: Request):
+async def get_dashboard_overview_page(request: Request) -> HTMLResponse:
     account = _unsafe_get_account_from_authentication_token_cookie(request)
     return HTMLResponse(
         content=make_dashboard_overview_page(
@@ -190,7 +193,7 @@ def _get_velocity_overview_chart_data_file_name(account: Account) -> str:
 
 
 @private_app.get("/dashboard/velocity")
-async def get_dashboard_velocity_page(request: Request):
+async def get_dashboard_velocity_page(request: Request) -> HTMLResponse:
     account = _unsafe_get_account_from_authentication_token_cookie(request)
     two_weeks_of_developer_velocity = (
         developer_velocity_business_logic.get_developer_velocity(
@@ -279,7 +282,7 @@ def _get_file_name_for_developer_velocity(
 
 
 @private_app.get("/dashboard/burn-down")
-async def get_dashboard_burn_down_page(request: Request):
+async def get_dashboard_burn_down_page(request: Request) -> HTMLResponse:
     account = _unsafe_get_account_from_authentication_token_cookie(request)
     file_name = _get_total_task_burn_down_data_file_name(
         account_id=account.id,
@@ -383,6 +386,6 @@ def _unsafe_get_account_from_authentication_token_cookie(request: Request) -> Ac
 
 
 @private_app.get("/{file_path}")
-async def serve_all_files_that_requested_by_html_files(file_path: Optional[str] = None):
+async def serve_all_files_that_requested_by_html_files(file_path: Optional[str] = None) -> FileResponse:
     resolved_file_path = "index.html" if not file_path else file_path
     return FileResponse(constants.PATH_TO_HTML_FILES / resolved_file_path)

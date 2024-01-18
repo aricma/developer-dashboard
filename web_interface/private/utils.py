@@ -23,7 +23,7 @@ def print_html(html: str) -> None:
     )
 
 
-def make_uuid():
+def make_uuid() -> str:
     return str(uuid4())
 
 

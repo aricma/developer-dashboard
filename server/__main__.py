@@ -1,6 +1,9 @@
+from typing import Callable, Awaitable
+
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
+from starlette.responses import Response
 
 from server.constants import API_URL_PREFIX
 from server.api_v1 import app as api_v1
@@ -45,7 +48,7 @@ re_routing_map = {
 
 
 @app.middleware("http")
-async def route_mapping(request: Request, call_next):
+async def route_mapping(request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
     requested_path = request.url.path
     if requested_path in re_routing_map.keys():
         request.scope["path"] = re_routing_map[requested_path]

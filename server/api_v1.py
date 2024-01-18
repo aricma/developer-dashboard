@@ -1,6 +1,7 @@
 from http.client import HTTPException
 
 from fastapi import Form, FastAPI
+from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from server import constants
@@ -13,7 +14,7 @@ app = FastAPI(
 
 
 @app.exception_handler(HTTPException)
-async def server_error_exception_handler(_, exc: HTTPException):
+async def server_error_exception_handler(_: Request, exc: HTTPException) -> JSONResponse:
     if isinstance(exc, AccountAlreadyExistsError):
         return JSONResponse(
             status_code=400,
