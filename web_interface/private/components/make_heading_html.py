@@ -1,4 +1,4 @@
-from typing import Union, Literal, Dict
+from typing import Union, Literal
 
 from web_interface.private.models import Alignment
 from web_interface.private.utils import make_html_template
@@ -23,7 +23,7 @@ heading_to_classes_map = {
     "h6": "",
 }
 
-alignment_to_classes_map: Dict[Alignment, str] = SkipMissingDict(
+alignment_to_classes_map = SkipMissingDict(
     **{
         "start": "text-start",
         "center": "text-center",
