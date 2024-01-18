@@ -40,7 +40,6 @@ from server.errors import (
 from server.utils import limit_string
 from web_interface.pages.make_dashboard_burn_down_page import (
     make_dashboard_burn_down_page,
-    BurnDownPageTask,
 )
 from web_interface.pages.make_dashboard_overview_page import (
     make_dashboard_overview_page,
@@ -50,6 +49,7 @@ from web_interface.pages.make_dashboard_velocity_page import (
 )
 from web_interface.pages.make_error_page import make_error_page
 from server import envorinment
+from web_interface.private.features.make_dashboard_burn_down_detail_body_html import BurnDownPageTask
 
 private_app = FastAPI(
     title="Developer Dashboard Web Server(Private)",
