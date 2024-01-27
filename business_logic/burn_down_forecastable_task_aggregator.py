@@ -21,13 +21,6 @@ class BurnDownForecastableTaskAggregator(Aggregator[BurnDownForecastableTask]):
             date_started=self._get_earliest_date(items),
         )
 
-    @staticmethod
-    def _get_all_story_points(tasks: List[BurnDownForecastableTask]) -> StoryPoints:
-        all_story_points: float = 0
-        for task in tasks:
-            all_story_points += task.story_points
-        return all_story_points
-
     def _get_earliest_date(self, tasks: List[BurnDownForecastableTask]) -> Date:
         if len(tasks) == 0:
             return self._make_fallback_date()
@@ -37,6 +30,13 @@ class BurnDownForecastableTaskAggregator(Aggregator[BurnDownForecastableTask]):
             if task.date_started < earliest_date:
                 earliest_date = task.date_started
         return earliest_date
+
+    @staticmethod
+    def _get_all_story_points(tasks: List[BurnDownForecastableTask]) -> StoryPoints:
+        all_story_points: float = 0
+        for task in tasks:
+            all_story_points += task.story_points
+        return all_story_points
 
     @staticmethod
     def _make_fallback_date() -> Date:
