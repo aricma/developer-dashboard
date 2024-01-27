@@ -4,7 +4,7 @@ from typing import Generic, List, TypeVar
 T = TypeVar("T")
 
 
-class TaskAggregator(ABC, Generic[T]):
+class Aggregator(ABC, Generic[T]):
     @abstractmethod
-    def aggregate(self, tasks: List[T]) -> T:
+    def aggregate(self, items: List[T]) -> T:
         ...

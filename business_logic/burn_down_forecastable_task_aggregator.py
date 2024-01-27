@@ -1,24 +1,24 @@
 from typing import List
 
 from business_logic.interfaces.maker import Maker
-from business_logic.interfaces.task_aggregator import TaskAggregator
+from business_logic.interfaces.task_aggregator import Aggregator
 from business_logic.models.burn_down_forecastable_task import BurnDownForecastableTask
 from business_logic.models.date import Date
 
 StoryPoints = float
 
 
-class BurnDownForecastableTaskAggregator(TaskAggregator[BurnDownForecastableTask]):
+class BurnDownForecastableTaskAggregator(Aggregator[BurnDownForecastableTask]):
     def __init__(self, id_maker: Maker[str]):
         self._id_maker = id_maker
 
     def aggregate(
-        self, tasks: List[BurnDownForecastableTask]
+        self, items: List[BurnDownForecastableTask]
     ) -> BurnDownForecastableTask:
         return BurnDownForecastableTask(
             id=self._id_maker.make(),
-            story_points=self._get_all_story_points(tasks),
-            date_started=self._get_earliest_date(tasks),
+            story_points=self._get_all_story_points(items),
+            date_started=self._get_earliest_date(items),
         )
 
     @staticmethod
