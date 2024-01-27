@@ -85,7 +85,3 @@ data from existing ticket systems (e.g., Jira), the tool aims to:
 
 We welcome contributions to improve this tool. Please read `CONTRIBUTING.md` for guidelines on how
 to propose enhancements or report issues.
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
